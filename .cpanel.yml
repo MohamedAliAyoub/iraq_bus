@@ -1,4 +1,0 @@
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/busiraq/public_html/Data
-    - /bin/cp -r * $DEPLOYPATH
