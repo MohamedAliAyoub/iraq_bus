@@ -45,9 +45,9 @@
                                         @endif
                                     </td>
                                     <td data-label="@lang('Trip')">
-                                        <span class="font-weight-bold">{{ __($item->trip->fleetType->name) }}</span>
+                                        <span class="font-weight-bold">{{ $item->trip?->fleetType?->name }}</span>
                                         <br>
-                                        <span class="font-weight-bold"> {{ __($item->trip->startFrom->name ) }} - {{ __($item->trip->endTo->name ) }}</span>
+                                        <span class="font-weight-bold">  {{ $item->trip?->startFrom?->name ?? '' }} - {{ $item->trip?->endTo?->name ?? '' }}</span>
                                     </td>
                                     <td data-label="@lang('Pickup Point')">
                                         {{ __($item->pickup->name) }}
