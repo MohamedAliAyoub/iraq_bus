@@ -164,9 +164,10 @@ class ManageUsersController extends Controller
             'credit_limit' => 'numeric|min:0',
         ]);
 
-        $user->debt_balance = $request->debt_balance;
-        $user->credit_limit = $request->credit_limit;
-        $user->save();
+        $user->pocket->update([
+            'debt_balance' => $request->debt_balance,
+            'credit_limit' => $request->credit_limit,
+        ]);
 
         $notify[] = ['success', 'User detail has been updated'];
         return redirect()->back()->withNotify($notify);
