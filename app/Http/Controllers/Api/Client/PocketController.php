@@ -26,6 +26,7 @@ public function getAmount()
 {
     $user = auth()->user();
     $pocket = $user->pocket;
+
     return response()->json(['status' => 'success','data'=> PocketResource::make($pocket) ,'message'=>''])->setStatusCode(200);
 }
 

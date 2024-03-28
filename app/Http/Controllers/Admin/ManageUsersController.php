@@ -18,6 +18,14 @@ class ManageUsersController extends Controller
         return view('admin.users.list', compact('pageTitle', 'emptyMessage', 'users'));
     }
 
+    public function getAgents()
+    {
+        $pageTitle = 'Manage Agents';
+        $emptyMessage = 'No Agent found';
+        $users = User::where("type" , 2)->orderBy('id','desc')->paginate(getPaginate());
+        return view('admin.users.agents', compact('pageTitle', 'emptyMessage', 'users'));
+    }
+
     public function activeUsers()
     {
         $pageTitle = 'Manage Active Users';
@@ -116,12 +124,15 @@ class ManageUsersController extends Controller
         $countryData = json_decode(file_get_contents(resource_path('views/partials/country.json')));
 
         $request->validate([
+//            'debt_balance' => 'numeric|min:0',
+//            'credit_limit' => 'numeric|min:0',
             'firstname' => 'required|max:50',
             'lastname' => 'required|max:50',
             'email' => 'required|email|max:90|unique:users,email,' . $user->id,
             'mobile' => 'required|unique:users,mobile,' . $user->id,
             'country' => 'required',
         ]);
+
         $countryCode = $request->country;
         $user->mobile = $request->mobile;
         $user->country_code = $countryCode;
@@ -142,6 +153,24 @@ class ManageUsersController extends Controller
 
         $notify[] = ['success', 'User detail has been updated'];
         return redirect()->back()->withNotify($notify);
+    }
+
+    public function updateFinancial(Request $request, $id)
+    {
+
+        $user = User::findOrFail($id);
+        $request->validate([
+            'debt_balance' => 'numeric|min:0',
+            'credit_limit' => 'numeric|min:0',
+        ]);
+
+        $user->debt_balance = $request->debt_balance;
+        $user->credit_limit = $request->credit_limit;
+        $user->save();
+
+        $notify[] = ['success', 'User detail has been updated'];
+        return redirect()->back()->withNotify($notify);
+
     }
 
 

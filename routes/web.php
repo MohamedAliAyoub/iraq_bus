@@ -90,6 +90,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
 
         // Users Manager
         Route::get('users', 'ManageUsersController@allUsers')->name('users.all');
+        Route::get('agents', 'ManageUsersController@getAgents')->name('users.agents');
         Route::get('users/active', 'ManageUsersController@activeUsers')->name('users.active');
         Route::get('users/banned', 'ManageUsersController@bannedUsers')->name('users.banned');
         Route::get('users/email-verified', 'ManageUsersController@emailVerifiedUsers')->name('users.email.verified');
@@ -100,6 +101,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('users/{scope}/search', 'ManageUsersController@search')->name('users.search');
         Route::get('user/detail/{id}', 'ManageUsersController@detail')->name('users.detail');
         Route::post('user/update/{id}', 'ManageUsersController@update')->name('users.update');
+        Route::post('user/updateFinancial/{id}', 'ManageUsersController@updateFinancial')->name('users.updateFinancial');
         Route::post('user/add-sub-balance/{id}', 'ManageUsersController@addSubBalance')->name('users.add.sub.balance');
         Route::get('user/send-email/{id}', 'ManageUsersController@showEmailSingleForm')->name('users.email.single');
         Route::post('user/send-email/{id}', 'ManageUsersController@sendEmailSingle')->name('users.email.single');

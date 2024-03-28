@@ -38,7 +38,12 @@
                                     <span class="menu-title">@lang('All Users')</span>
                                 </a>
                             </li>
-
+                            <li class="sidebar-menu-item {{menuActive('admin.users.agents')}} ">
+                                <a href="{{route('admin.users.agents')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('All Agents')</span>
+                                </a>
+                            </li>
                             <li class="sidebar-menu-item {{menuActive('admin.users.active')}} ">
                                 <a href="{{route('admin.users.active')}}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>

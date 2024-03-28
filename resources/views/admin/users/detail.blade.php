@@ -169,6 +169,42 @@
                     </form>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title border-bottom pb-2">@lang('Information of') @lang('Money')  {{$user->fullname}}</h5>
+
+                    <form action="{{route('admin.users.updateFinancial',[$user->id])}}" method="POST">
+                        @csrf
+                        @if($user->type == 2)
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label class="form-control-label font-weight-bold">@lang('Debt_balance')</label>
+                                        <input class="form-control" type="text" name="debt_balance"
+                                               value="{{$user->debt_balance}}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label  font-weight-bold">@lang('Credit_limit')</label>
+                                        <input class="form-control" type="text" name="credit_limit"
+                                               value="{{$user->credit_limit}}">
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="submit"
+                                        class="btn btn--primary btn-block btn-lg">@lang('Save Changes')
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
         </div>
     </div>
 
