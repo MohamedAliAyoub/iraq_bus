@@ -19,6 +19,8 @@ class HistoryResource extends JsonResource
             'user_id' => $this->user_id,
             'route' => $this->route,
             'passenger_numbers' => $this->bookedTicket->passenger_numbers,
+            'passenger_phone' => $this->bookedTicket->responsible_phone,
+            'passenger_name' => $this->bookedTicket->responsible_name,
             'amount' => $this->amount,
             'debt_balance' => $this->debt_balance,
             'credit_limit' => $this->credit_limit,
