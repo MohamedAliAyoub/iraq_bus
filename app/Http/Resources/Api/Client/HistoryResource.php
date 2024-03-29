@@ -24,6 +24,7 @@ class HistoryResource extends JsonResource
             'amount' => $this->amount,
             'creditor' => $this->creditor,
             'debtor' => $this->debtor,
+            'total' => $this->total,
             'type' => $this->type,
             'created_at' => $this->created_at->format('Y-m-d'),
         ];
