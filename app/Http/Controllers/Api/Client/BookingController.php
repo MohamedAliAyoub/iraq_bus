@@ -190,6 +190,11 @@ class BookingController extends Controller
 
         $route = $trip->route;
         $ticketPrice = TicketPrice::where('fleet_type_id', $trip->fleetType->id)->where('vehicle_route_id', $route->id)->first();
+
+        if (auth()->user()->pocket->amount < $ticketPrice->price )
+        {
+            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('you_dont_have_enough_money')])->setStatusCode(400);
+        }
         // calculate sub_total
         $subTotal = 0;
         $seatName = [];
@@ -275,6 +280,10 @@ class BookingController extends Controller
             return 1 . '-' . $seat->name;
         })->toArray();
 
+        if (auth()->user()->pocket->amount < $ticketPrice->price )
+        {
+            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('you_dont_have_enough_money')])->setStatusCode(400);
+        }
         $pnr_number = getTrx(10);
         $bookedTicket = BookedTicket::create([
             'user_id' => auth()->user()->id,
