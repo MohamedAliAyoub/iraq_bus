@@ -22,8 +22,8 @@ class HistoryResource extends JsonResource
             'passenger_phone' => $this->bookedTicket->responsible_phone,
             'passenger_name' => $this->bookedTicket->responsible_name,
             'amount' => $this->amount,
-            'debt_balance' => $this->debt_balance,
-            'credit_limit' => $this->credit_limit,
+            'creditor' => $this->creditor,
+            'debtor' => $this->debtor,
             'type' => $this->type,
             'created_at' => $this->created_at->format('Y-m-d'),
         ];
