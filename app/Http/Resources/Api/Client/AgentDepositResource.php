@@ -4,7 +4,7 @@ namespace App\Http\Resources\Api\Client;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PocketResource extends JsonResource
+class AgentDepositResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

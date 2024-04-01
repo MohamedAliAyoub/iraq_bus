@@ -191,6 +191,7 @@ class BookingController extends Controller
         $route = $trip->route;
         $ticketPrice = TicketPrice::where('fleet_type_id', $trip->fleetType->id)->where('vehicle_route_id', $route->id)->first();
 
+//        dd(auth()->user()->pocket->amount < $ticketPrice->price , auth()->user()->pocket->amount , $ticketPrice->price , auth()->id());
         if (auth()->user()->pocket->amount < $ticketPrice->price )
         {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('you_dont_have_enough_money')])->setStatusCode(400);

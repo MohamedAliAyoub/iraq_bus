@@ -5,7 +5,7 @@
 				<h6>{{inputTitle($k)}}</h6>
 				<hr>
 				<div class="ml-3">
-					@include('admin.agent_deposit.gateway_data',['details'=>$val])
+					@include('admin.deposit.gateway_data',['details'=>$val])
 				</div>
 			@else
 				<h6>{{@inputTitle($k)}}</h6>

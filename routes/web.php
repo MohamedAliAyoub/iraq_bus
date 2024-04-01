@@ -211,6 +211,24 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
 
         });
 
+        // DEPOSIT AGENT SYSTEM
+        Route::name('agent_deposit.')->prefix('agent_payment')->group(function(){
+            Route::get('pending', 'AgentDepositController@pending')->name('pending');
+            Route::get('successful', 'AgentDepositController@successful')->name('successful');
+            Route::get('rejected', 'AgentDepositController@rejected')->name('rejected');
+            Route::get('all', 'AgentDepositController@all')->name('all');
+            Route::get('details/{id}', 'AgentDepositController@details')->name('details');
+
+            Route::post('reject', 'AgentDepositController@reject')->name('reject');
+            Route::post('approve', 'AgentDepositController@approve')->name('approve');
+            Route::get('via/{method}/{type?}', 'AgentDepositController@depositViaMethod')->name('method');
+            Route::get('/{scope}/search', 'AgentDepositController@search')->name('search');
+            Route::get('date-search/{scope}', 'AgentDepositController@dateSearch')->name('dateSearch');
+
+        });
+
+
+
 
         // Deposit Gateway
         Route::name('gateway.')->prefix('gateway')->group(function(){

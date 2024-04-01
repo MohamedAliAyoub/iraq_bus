@@ -137,6 +137,50 @@
                         </ul>
                     </div>
                 </li>
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)" class="{{menuActive('admin.deposit*',3)}}">
+                        <i class="menu-icon las la-credit-card"></i>
+                        <span class="menu-title">@lang('Agent_Payment_History')</span>
+                        @if(0 < $pending_payment_count)
+                            <span class="menu-badge pill bg--primary ml-auto">
+                                <i class="fa fa-exclamation"></i>
+                            </span>
+                        @endif
+                    </a>
+                    <div class="sidebar-submenu {{menuActive('admin.agent_deposit*',2)}} ">
+                        <ul>
+                            <li class="sidebar-menu-item {{menuActive('admin.agent_deposit.pending')}} ">
+                                <a href="{{ route('admin.agent_deposit.pending') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Pending Payment')</span>
+                                    @if($agent_pending_payment_count)
+                                        <span class="menu-badge pill bg--primary ml-auto">{{$agent_pending_payment_count}}</span>
+                                    @endif
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.agent_deposit.successful')}} ">
+                                <a href="{{ route('admin.agent_deposit.successful') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Successful Payment')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.agent_deposit.rejected')}} ">
+                                <a href="{{ route('admin.agent_deposit.rejected') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Rejected Payment')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.agent_deposit.all')}} ">
+                                <a href="{{ route('admin.agent_deposit.all') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('All Payment')</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
 
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{menuActive('admin.vehicle.ticket*',3)}}">

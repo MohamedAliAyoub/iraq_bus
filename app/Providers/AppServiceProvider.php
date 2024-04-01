@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\AdminNotification;
+use App\Models\AgentDeposit;
 use App\Models\Frontend;
 use App\Models\GeneralSetting;
 use App\Models\Language;
@@ -52,7 +53,8 @@ class AppServiceProvider extends ServiceProvider
                 'sms_unverified_users_count'   => User::smsUnverified()->count(),
                 'pending_ticket_count'         => SupportTicket::whereIN('status', [0,2])->count(),
                 'pending_vehicle_ticket'       => BookedTicket::where('status',  2)->count(),
-                'pending_payment_count'       => Deposit::where('status', 2)->count()
+                'pending_payment_count'       => Deposit::where('status', 2)->count(),
+                'agent_pending_payment_count'       => AgentDeposit::where('status', 2)->count()
             ]);
         });
 
