@@ -7,12 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class FleetType extends Model
 {
     protected $guarded = ['id'];
-
+    protected $appends = ['image_url'];
     protected $casts = [
         'deck_seats' => 'object',
         'facilities' => 'array'
     ];
 
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('assets/images/fleet_type/' . $this->image) : null;
+    }
     public function vehicles(){
         return $this->hasMany(Vehicle::class);
     }

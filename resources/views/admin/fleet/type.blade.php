@@ -10,6 +10,7 @@
                             <thead>
                                 <tr>
                                     <th>@lang('Name')</th>
+                                    <th>@lang('Image')</th>
                                     <th>@lang('Seat Layout')</th>
                                     <th>@lang('No of Deck')</th>
                                     <th>@lang('Total Seat')</th>
@@ -23,6 +24,9 @@
                                 <tr>
                                     <td data-label="@lang('Name')">
                                         {{ __($item->name) }}
+                                    </td>
+                                    <td data-label="@lang('Image')">
+                                        <IMG src="{{$item->image_url}}">
                                     </td>
                                     <td data-label="@lang('Seat Layout')">
                                         {{ __($item->seat_layout) }}
@@ -104,12 +108,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('admin.fleet.type.store')}}" method="POST">
+                <form action="{{ route('admin.fleet.type.store')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
                             <label class="form-control-label font-weight-bold"> @lang('Name')</label>
                             <input type="text" class="form-control" placeholder="@lang('Enter Fleet Name')" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" class="profilePicUpload" id="profilePicUpload" accept=".png, .jpg, .jpeg" name="image">
+                            <label for="profilePicUpload" class="bg--primary">@lang('Select Image') </label>
                         </div>
                         <div class="form-group">
                             <label class="form-control-label font-weight-bold"> @lang('Seat Layout')</label>
@@ -158,12 +166,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
                             <label class="form-control-label font-weight-bold"> @lang('Name')</label>
                             <input type="text" class="form-control" placeholder="@lang('Enter Fleet Name')" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" class="profilePicUpload" id="profilePicUpload" accept=".png, .jpg, .jpeg" name="image">
+                            <label for="profilePicUpload" class="bg--primary">@lang('Select Image') </label>
                         </div>
                         <div class="form-group">
                             <label class="form-control-label font-weight-bold"> @lang('Seat Layout')</label>

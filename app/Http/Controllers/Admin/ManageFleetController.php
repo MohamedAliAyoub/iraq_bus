@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Rules\FileTypeValidate;
 use Illuminate\Http\Request;
 use App\Models\SeatLayout;
 use App\Models\FleetType;
@@ -70,6 +71,7 @@ class ManageFleetController extends Controller
         $request->validate([
             'name'        => 'required|unique:fleet_types',
             'seat_layout' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'deck'        => 'required|numeric|gt:0',
             'deck_seats'  => 'required|array|min:1',
             'deck_seats.*'=> 'required|numeric|gt:0',
@@ -79,6 +81,17 @@ class ManageFleetController extends Controller
             'deck_seats.*.numeric'   => 'Seat number for all deck is must be a number',
             'deck_seats.*.gt:0'      => 'Seat number for all deck is must be greater than 0',
         ]);
+
+        if ($request->hasFile('image')) {
+            try {
+                $image_path = uploadImage($request->image, imagePath()['fleet_type']['path']);
+
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'Image could not be uploaded.'];
+                return back()->withNotify($notify);
+            }
+        }
+
         $fleetType = new FleetType();
         $fleetType->name = $request->name;
         $fleetType->seat_layout = $request->seat_layout;
@@ -87,6 +100,7 @@ class ManageFleetController extends Controller
         $fleetType->has_ac = $request->has_ac ? $request->has_ac : 0;
         $fleetType->facilities = $request->facilities ?? null;
         $fleetType->status = 1;
+        $fleetType->image = $image_path;
         $fleetType->save();
 
         $notify[] = ['success','Fleet type saved successfully'];
@@ -104,6 +118,7 @@ class ManageFleetController extends Controller
 
         $request->validate([
             'name'        => 'required|unique:fleet_types,name,'.$id,
+            'image' => 'image|mimes:jpeg,png,jpg,gif',
             'seat_layout' => 'required',
             'deck'        => 'required|numeric|gt:0',
             'deck_seats'  => 'required|array|min:1',
@@ -114,6 +129,7 @@ class ManageFleetController extends Controller
             'deck_seats.*.numeric'   => 'Seat number for all deck is must be a number',
             'deck_seats.*.gt:0'      => 'Seat number for all deck is must be greater than 0',
         ]);
+
         // return $request;
         $fleetType = FleetType::find($id);
         $fleetType->name = $request->name;
@@ -123,6 +139,19 @@ class ManageFleetController extends Controller
         $fleetType->has_ac = $request->has_ac ? 1 : 0;
         $fleetType->facilities = $request->facilities ?? null;
         $fleetType->save();
+
+        if ($request->hasFile('image')) {
+            try {
+                $old = $fleetType->image ?: null;
+                $fleetType->image = uploadImage($request->image, imagePath()['fleet_type']['path'], imagePath()['fleet_type']['size'], $old);
+                $fleetType->save();
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'Image could not be uploaded.'];
+                return back()->withNotify($notify);
+            }
+        }
+
+
         $notify[] = ['success','Fleet type updated successfully'];
         return back()->withNotify($notify);
     }

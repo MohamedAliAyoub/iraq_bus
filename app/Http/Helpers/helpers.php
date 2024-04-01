@@ -726,6 +726,10 @@ function imagePath()
         'path' => 'assets/images/agent',
         'size' => '600x315'
     ];
+    $data['fleet_type'] = [
+        'path' => 'assets/images/fleet_type',
+        'size' => '600x315'
+    ];
 
     return $data;
 }
