@@ -38,7 +38,7 @@ class BookingController extends Controller
      */
     public function searchDirectBookings(SearchDirectBookingRequest $request)
     {
-        $trips = Trip::active();
+        $trips = Trip::with('fleetType')->active();
         if ($request->pickup && $request->destination) {
             $pickup = $request->pickup;
             $destination = $request->destination;
@@ -74,7 +74,7 @@ class BookingController extends Controller
                 }
             }
 
-            $trips = Trip::active()->whereIn('id', $tripArray);
+            $trips = Trip::with('fleetType')->active()->whereIn('id', $tripArray);
         } else {
             if ($request->pickup) {
                 $pickup = $request->pickup;
