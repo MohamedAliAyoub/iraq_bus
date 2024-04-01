@@ -82,7 +82,7 @@ class PocketController extends Controller
     private function savePendingAmount($request)
     {
         $image = $request['صورة_سكرين_للحوالة'];
-
+        $image_path = null;
         if (is_file($image)) {
             try {
                 $image_path = uploadImage($image, imagePath()['agent']['path']);
