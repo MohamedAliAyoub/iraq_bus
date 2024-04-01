@@ -18,7 +18,7 @@ class DirectBookingResource extends JsonResource
             'id' => $this->id,
             'title ' => $this->title,
             'seat_layout' => $this->fleetType->seat_layout,
-            'image' => $this->fleetType->image_url,
+            'fleet_image' => $this->fleetType->image_url,
             'fleet_type' => $this->fleetType->name,
             'start_date' => showDateTime($this->schedule->start_from, 'h:i A'),
             'end_date' => showDateTime($this->schedule->end_at, 'h:i A'),
