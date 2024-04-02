@@ -81,6 +81,18 @@ class PocketController extends Controller
 
     private function savePendingAmount($request)
     {
+        $validator = Validator::make($request, [
+            'gateway_id' => 'required',
+            'amount' => 'required|numeric',
+            'رقم_الهاتف' => 'required|numeric',
+            'رقم_الحوالة' => 'required|numeric',
+            'صورة_سكرين_للحوالة' => 'required|image',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 'fail', 'message' => "",
+                'errors' => $validator->errors()->getMessageBag(),
+            ], 400);
+        }
         $image = $request['صورة_سكرين_للحوالة'];
         $image_path = null;
         if (is_file($image)) {
