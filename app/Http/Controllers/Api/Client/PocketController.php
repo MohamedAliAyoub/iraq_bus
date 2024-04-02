@@ -61,6 +61,7 @@ class PocketController extends Controller
 
         $rules = [];
         $gateway_parameters = json_decode($gatewayCurrency->gateway_parameter, true);
+
         foreach ($gateway_parameters as $key => $parameter) {
             $fieldName = $parameter['field_name'];
             $validationRules = $parameter['validation'];
@@ -72,6 +73,22 @@ class PocketController extends Controller
                 'errors' => $validator->errors()->getMessageBag(),
             ], 400);
         }
+        $validator = Validator::make($request->all(), [
+            'gateway_id' => 'required',
+            'amount' => 'required|numeric',
+            'رقم_الهاتف' => 'required|numeric',
+            'رقم_الحوالة' => 'required|numeric',
+            'صورة_سكرين_للحوالة' => 'required|image',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'status' => 'fail',
+                    'data' => null,
+                    'message' =>  $validator->errors()->all(),
+                ])->setStatusCode(422);
+        }
+
         $agent_deposit = $this->savePendingAmount($request->all());
 //    $pocket = auth()->user()->pocket;
 //    $pocket->increment('amount', $amount);
@@ -81,18 +98,7 @@ class PocketController extends Controller
 
     private function savePendingAmount($request)
     {
-        $validator = Validator::make($request, [
-            'gateway_id' => 'required',
-            'amount' => 'required|numeric',
-            'رقم_الهاتف' => 'required|numeric',
-            'رقم_الحوالة' => 'required|numeric',
-            'صورة_سكرين_للحوالة' => 'required|image',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['status' => 'fail', 'message' => "",
-                'errors' => $validator->errors()->getMessageBag(),
-            ], 400);
-        }
+
         $image = $request['صورة_سكرين_للحوالة'];
         $image_path = null;
         if (is_file($image)) {
@@ -113,8 +119,8 @@ class PocketController extends Controller
             "mobile" => $request['رقم_الهاتف'],
             "status" => 2,
             "trx" => getTrx(10),
-            "method_code" => 1000 ,
-            "method_currency" =>"IQD"
+            "method_code" => 1000,
+            "method_currency" => "IQD"
         ]);
         return $agent_deposit;
 
