@@ -40,15 +40,14 @@ class AuthController extends Controller
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->email = $request->email;
-        $user->address = $request->country;
         $user->password = Hash::make($request->password);
         $user->mobile = $request->mobile_code.$request->mobile;
         $user->address = [
-            'address' => '',
-            'state' => '',
-            'zip' => '',
-//            'country' => isset($request->country) ? $request->country: null,
-            'city' => ''
+            'address' => $request->address['address'] ?? null ,
+            'state' => $request->address['state'] ?? null,
+            'zip' => $request->address['zip'] ?? null,
+            'country' =>$request->address['country'] ?? null ,
+            'city' => $request->address['city'] ?? null
         ];
         $user->status = 1;
         $user->type = User::CLIENT;
