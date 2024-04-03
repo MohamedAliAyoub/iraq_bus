@@ -79,4 +79,7 @@
             </div>
         </div>
     </form>
+    <div class="d-inline-block ml-2">
+        <a href="{{ route('admin.users.create') }}" class="btn btn--success"><i class="fa fa-plus"></i> @lang('Add User')</a>
+    </div>
 @endpush

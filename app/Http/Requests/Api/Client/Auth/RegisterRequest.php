@@ -27,6 +27,7 @@ class RegisterRequest extends FormRequest
 
         return [
             'username'         =>'required|string',
+            'email' => 'required|email|max:90|unique:users,email',
             'country_code'     =>'required|string',
             'mobile_code'      =>'required|numeric',
             'mobile'           =>'required|numeric|digits_between:10,16',

@@ -100,6 +100,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
 
         Route::get('users/{scope}/search', 'ManageUsersController@search')->name('users.search');
         Route::get('user/detail/{id}', 'ManageUsersController@detail')->name('users.detail');
+        Route::get('user/create', 'ManageUsersController@create')->name('users.create');
+        Route::post('user/store', 'ManageUsersController@store')->name('users.store');
         Route::post('user/update/{id}', 'ManageUsersController@update')->name('users.update');
         Route::post('user/updateFinancial/{id}', 'ManageUsersController@updateFinancial')->name('users.updateFinancial');
         Route::post('user/add-sub-balance/{id}', 'ManageUsersController@addSubBalance')->name('users.add.sub.balance');

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -6,6 +7,7 @@ use App\Models\EmailLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 
 class ManageUsersController extends Controller
@@ -14,7 +16,7 @@ class ManageUsersController extends Controller
     {
         $pageTitle = 'Manage Users';
         $emptyMessage = 'No user found';
-        $users = User::orderBy('id','desc')->paginate(getPaginate());
+        $users = User::orderBy('id', 'desc')->paginate(getPaginate());
         return view('admin.users.list', compact('pageTitle', 'emptyMessage', 'users'));
     }
 
@@ -22,7 +24,7 @@ class ManageUsersController extends Controller
     {
         $pageTitle = 'Manage Agents';
         $emptyMessage = 'No Agent found';
-        $users = User::where("type" , 2)->orderBy('id','desc')->paginate(getPaginate());
+        $users = User::where("type", 2)->orderBy('id', 'desc')->paginate(getPaginate());
         return view('admin.users.agents', compact('pageTitle', 'emptyMessage', 'users'));
     }
 
@@ -30,7 +32,7 @@ class ManageUsersController extends Controller
     {
         $pageTitle = 'Manage Active Users';
         $emptyMessage = 'No active user found';
-        $users = User::active()->orderBy('id','desc')->paginate(getPaginate());
+        $users = User::active()->orderBy('id', 'desc')->paginate(getPaginate());
         return view('admin.users.list', compact('pageTitle', 'emptyMessage', 'users'));
     }
 
@@ -38,7 +40,7 @@ class ManageUsersController extends Controller
     {
         $pageTitle = 'Banned Users';
         $emptyMessage = 'No banned user found';
-        $users = User::banned()->orderBy('id','desc')->paginate(getPaginate());
+        $users = User::banned()->orderBy('id', 'desc')->paginate(getPaginate());
         return view('admin.users.list', compact('pageTitle', 'emptyMessage', 'users'));
     }
 
@@ -46,14 +48,15 @@ class ManageUsersController extends Controller
     {
         $pageTitle = 'Email Unverified Users';
         $emptyMessage = 'No email unverified user found';
-        $users = User::emailUnverified()->orderBy('id','desc')->paginate(getPaginate());
+        $users = User::emailUnverified()->orderBy('id', 'desc')->paginate(getPaginate());
         return view('admin.users.list', compact('pageTitle', 'emptyMessage', 'users'));
     }
+
     public function emailVerifiedUsers()
     {
         $pageTitle = 'Email Verified Users';
         $emptyMessage = 'No email verified user found';
-        $users = User::emailVerified()->orderBy('id','desc')->paginate(getPaginate());
+        $users = User::emailVerified()->orderBy('id', 'desc')->paginate(getPaginate());
         return view('admin.users.list', compact('pageTitle', 'emptyMessage', 'users'));
     }
 
@@ -62,7 +65,7 @@ class ManageUsersController extends Controller
     {
         $pageTitle = 'SMS Unverified Users';
         $emptyMessage = 'No sms unverified user found';
-        $users = User::smsUnverified()->orderBy('id','desc')->paginate(getPaginate());
+        $users = User::smsUnverified()->orderBy('id', 'desc')->paginate(getPaginate());
         return view('admin.users.list', compact('pageTitle', 'emptyMessage', 'users'));
     }
 
@@ -71,7 +74,7 @@ class ManageUsersController extends Controller
     {
         $pageTitle = 'SMS Verified Users';
         $emptyMessage = 'No sms verified user found';
-        $users = User::smsVerified()->orderBy('id','desc')->paginate(getPaginate());
+        $users = User::smsVerified()->orderBy('id', 'desc')->paginate(getPaginate());
         return view('admin.users.list', compact('pageTitle', 'emptyMessage', 'users'));
     }
 
@@ -87,18 +90,18 @@ class ManageUsersController extends Controller
         if ($scope == 'active') {
             $pageTitle = 'Active ';
             $users = $users->where('status', 1);
-        }elseif($scope == 'banned'){
+        } elseif ($scope == 'banned') {
             $pageTitle = 'Banned';
             $users = $users->where('status', 0);
-        }elseif($scope == 'emailUnverified'){
+        } elseif ($scope == 'emailUnverified') {
             $pageTitle = 'Email Unverified ';
             $users = $users->where('ev', 0);
-        }elseif($scope == 'smsUnverified'){
+        } elseif ($scope == 'smsUnverified') {
             $pageTitle = 'SMS Unverified ';
             $users = $users->where('sv', 0);
-        }elseif($scope == 'withBalance'){
+        } elseif ($scope == 'withBalance') {
             $pageTitle = 'With Balance ';
-            $users = $users->where('balance','!=',0);
+            $users = $users->where('balance', '!=', 0);
         }
 
         $users = $users->paginate(getPaginate());
@@ -113,9 +116,63 @@ class ManageUsersController extends Controller
         $pageTitle = 'User Detail';
         $user = User::findOrFail($id);
         $countries = json_decode(file_get_contents(resource_path('views/partials/country.json')));
-        return view('admin.users.detail', compact('pageTitle', 'user','countries'));
+        return view('admin.users.detail', compact('pageTitle', 'user', 'countries'));
     }
 
+    public function create()
+    {
+        $pageTitle = 'User Detail';
+        $countries = json_decode(file_get_contents(resource_path('views/partials/country.json')));
+        return view('admin.users.create', compact('pageTitle', 'countries'));
+    }
+
+
+    public function store(Request $request)
+    {
+        $countryData = json_decode(file_get_contents(resource_path('views/partials/country.json')));
+
+        $request->validate([
+            'debt_balance' => 'numeric|min:0',
+            'credit_limit' => 'numeric|min:0',
+            'firstname' => 'required|max:50',
+            'lastname' => 'required|max:50',
+            'email' => 'required|email|max:90|unique:users,email',
+            'mobile' => 'required|unique:users,mobile',
+            'address.*' => 'required',
+            'password' => 'required|string|min:8|confirmed'
+        ]);
+
+        $countryCode = $request->country;
+        $user = new User();
+        $user->mobile = $request->mobile;
+        $user->country_code = $countryCode;
+        $user->firstname = $request->firstname;
+        $user->lastname = $request->lastname;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+
+        $user->address = [
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'zip' => $request->zip,
+            'country' => @$countryData->$countryCode->country,
+        ];
+        $user->status = 1;
+        $user->ev = 1;
+        $user->sv = 1;
+        $user->save();
+
+        if (!$user->pocket) {
+            $user->pocket()->create([
+                'debt_balance' => $request->debt_balance,
+                'credit_limit' => $request->credit_limit,
+            ]);
+        }
+
+        $notify[] = ['success', 'User has been created'];
+        return redirect()->back()->withNotify($notify);
+    }
 
     public function update(Request $request, $id)
     {
@@ -140,12 +197,12 @@ class ManageUsersController extends Controller
         $user->lastname = $request->lastname;
         $user->email = $request->email;
         $user->address = [
-                            'address' => $request->address,
-                            'city' => $request->city,
-                            'state' => $request->state,
-                            'zip' => $request->zip,
-                            'country' => @$countryData->$countryCode->country,
-                        ];
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'zip' => $request->zip,
+            'country' => @$countryData->$countryCode->country,
+        ];
         $user->status = $request->status ? 1 : 0;
         $user->ev = $request->ev ? 1 : 0;
         $user->sv = $request->sv ? 1 : 0;
@@ -180,10 +237,9 @@ class ManageUsersController extends Controller
         $user = User::findOrFail($id);
         $pageTitle = 'User Login History - ' . $user->username;
         $emptyMessage = 'No users login found.';
-        $login_logs = $user->login_logs()->orderBy('id','desc')->with('user')->paginate(getPaginate());
+        $login_logs = $user->login_logs()->orderBy('id', 'desc')->with('user')->paginate(getPaginate());
         return view('admin.users.logins', compact('pageTitle', 'emptyMessage', 'login_logs'));
     }
-
 
 
     public function showEmailSingleForm($id)
@@ -227,24 +283,27 @@ class ManageUsersController extends Controller
         return back()->withNotify($notify);
     }
 
-    public function login($id){
+    public function login($id)
+    {
         $user = User::findOrFail($id);
         Auth::login($user);
         return redirect()->route('user.home');
     }
 
-    public function emailLog($id){
+    public function emailLog($id)
+    {
         $user = User::findOrFail($id);
-        $pageTitle = 'Email log of '.$user->username;
-        $logs = EmailLog::where('user_id',$id)->with('user')->orderBy('id','desc')->paginate(getPaginate());
+        $pageTitle = 'Email log of ' . $user->username;
+        $logs = EmailLog::where('user_id', $id)->with('user')->orderBy('id', 'desc')->paginate(getPaginate());
         $emptyMessage = 'No data found';
-        return view('admin.users.email_log', compact('pageTitle','logs','emptyMessage','user'));
+        return view('admin.users.email_log', compact('pageTitle', 'logs', 'emptyMessage', 'user'));
     }
 
-    public function emailDetails($id){
+    public function emailDetails($id)
+    {
         $email = EmailLog::findOrFail($id);
         $pageTitle = 'Email details';
-        return view('admin.users.email_details', compact('pageTitle','email'));
+        return view('admin.users.email_details', compact('pageTitle', 'email'));
     }
 
 }
