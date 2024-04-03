@@ -30,7 +30,7 @@ class RegisterRequest extends FormRequest
             'country_code'     =>'required|string',
             'mobile_code'      =>'required|numeric',
             'mobile'           =>'required|numeric|digits_between:10,16',
-            'country'          =>'required|string',
+            'country'          =>'nullable|string',
             'password'         =>'required|confirmed|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*#?&]/',
         ];
     }
