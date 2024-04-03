@@ -159,6 +159,7 @@ class ManageUsersController extends Controller
             'country' => @$countryData->$countryCode->country,
         ];
         $user->status = 1;
+        $user->type = 2;
         $user->ev = 1;
         $user->sv = 1;
         $user->save();
