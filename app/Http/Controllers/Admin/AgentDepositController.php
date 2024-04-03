@@ -165,22 +165,22 @@ class AgentDepositController extends Controller
         $pocket = $user->pocket;
         $pocket->increment('amount', $deposit->amount);
 
-        $general = GeneralSetting::first();
-        notify($user, 'PAYMENT_APPROVE', [
-            'method_name' => $deposit->gatewayCurrency()->name,
-            'method_currency' => $deposit->method_currency,
-            'method_amount' => showAmount($deposit->final_amo),
-            'amount' => showAmount($deposit->amount),
-            'charge' => showAmount($deposit->charge),
-            'currency' => $general->cur_text,
-            'rate' => showAmount($deposit->rate),
-            'trx' => $deposit->trx,
-//            'journey_date' => showDateTime($bookedTicket->date_of_journey , 'd m, Y'),
-//            'seats' => implode(',',$bookedTicket->seats),
-//            'total_seats' => sizeof($bookedTicket->seats),
-//            'source' => $bookedTicket->pickup->name,
-//            'destination' => $bookedTicket->drop->name
-        ]);
+//        $general = GeneralSetting::first();
+//        notify($user, 'PAYMENT_APPROVE', [
+//            'method_name' => $deposit->gatewayCurrency()->name,
+//            'method_currency' => $deposit->method_currency,
+//            'method_amount' => showAmount($deposit->final_amo),
+//            'amount' => showAmount($deposit->amount),
+//            'charge' => showAmount($deposit->charge),
+//            'currency' => $general->cur_text,
+//            'rate' => showAmount($deposit->rate),
+//            'trx' => $deposit->trx,
+////            'journey_date' => showDateTime($bookedTicket->date_of_journey , 'd m, Y'),
+////            'seats' => implode(',',$bookedTicket->seats),
+////            'total_seats' => sizeof($bookedTicket->seats),
+////            'source' => $bookedTicket->pickup->name,
+////            'destination' => $bookedTicket->drop->name
+//        ]);
         $notify[] = ['success', __('Payment_Request_Has_Been_Approved')];
 
         return redirect()->route('admin.agent_deposit.pending')->withNotify($notify);
