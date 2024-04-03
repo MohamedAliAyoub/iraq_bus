@@ -96,51 +96,51 @@
                         </div>
 
 
-                        <div class="row mt-4">
-                            <div class="col-md-12">
-                                <div class="form-group ">
-                                    <label class="form-control-label font-weight-bold">@lang('Address') </label>
-                                    <input class="form-control" type="text" name="address"
-                                           value="{{@$user->address->address}}">
-                                </div>
-                            </div>
+{{--                        <div class="row mt-4">--}}
+{{--                            <div class="col-md-12">--}}
+{{--                                <div class="form-group ">--}}
+{{--                                    <label class="form-control-label font-weight-bold">@lang('Address') </label>--}}
+{{--                                    <input class="form-control" type="text" name="address"--}}
+{{--                                           value="{{@$user->address->address}}">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
-                            <div class="col-xl-3 col-md-6">
-                                <div class="form-group">
-                                    <label class="form-control-label font-weight-bold">@lang('City') </label>
-                                    <input class="form-control" type="text" name="city"
-                                           value="{{@$user->address->city}}">
-                                </div>
-                            </div>
+{{--                            <div class="col-xl-3 col-md-6">--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <label class="form-control-label font-weight-bold">@lang('City') </label>--}}
+{{--                                    <input class="form-control" type="text" name="city"--}}
+{{--                                           value="{{@$user->address->city}}">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
-                            <div class="col-xl-3 col-md-6">
-                                <div class="form-group ">
-                                    <label class="form-control-label font-weight-bold">@lang('State') </label>
-                                    <input class="form-control" type="text" name="state"
-                                           value="{{@$user->address->state}}">
-                                </div>
-                            </div>
+{{--                            <div class="col-xl-3 col-md-6">--}}
+{{--                                <div class="form-group ">--}}
+{{--                                    <label class="form-control-label font-weight-bold">@lang('State') </label>--}}
+{{--                                    <input class="form-control" type="text" name="state"--}}
+{{--                                           value="{{@$user->address->state}}">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
-                            <div class="col-xl-3 col-md-6">
-                                <div class="form-group ">
-                                    <label class="form-control-label font-weight-bold">@lang('Zip/Postal') </label>
-                                    <input class="form-control" type="text" name="zip" value="{{@$user->address->zip}}">
-                                </div>
-                            </div>
+{{--                            <div class="col-xl-3 col-md-6">--}}
+{{--                                <div class="form-group ">--}}
+{{--                                    <label class="form-control-label font-weight-bold">@lang('Zip/Postal') </label>--}}
+{{--                                    <input class="form-control" type="text" name="zip" value="{{@$user->address->zip}}">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
-                            <div class="col-xl-3 col-md-6">
-                                <div class="form-group ">
-                                    <label class="form-control-label font-weight-bold">@lang('Country') </label>
-                                    <select name="country" class="form-control">
-                                        @foreach($countries as $key => $country)
-                                            <option value="{{ $key }}"
-                                                    @if($country->country == @$user->address->country ) selected @endif>{{ __($country->country) }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
+{{--                            <div class="col-xl-3 col-md-6">--}}
+{{--                                <div class="form-group ">--}}
+{{--                                    <label class="form-control-label font-weight-bold">@lang('Country') </label>--}}
+{{--                                    <select name="country" class="form-control">--}}
+{{--                                        @foreach($countries as $key => $country)--}}
+{{--                                            <option value="{{ $key }}"--}}
+{{--                                                    @if($country->country == @$user->address->country ) selected @endif>{{ __($country->country) }}</option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{----}}
 
                         <div class="row">
                             <div class="form-group col-xl-4 col-md-6  col-sm-3 col-12">
