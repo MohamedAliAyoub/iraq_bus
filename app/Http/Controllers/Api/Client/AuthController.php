@@ -36,14 +36,18 @@ class AuthController extends Controller
         }
         $allRequest = $request->validated();
         $user = User::create(collect($allRequest)->except(['password','mobile','address'])->toArray());
- 
+
+        $user->firstname = $request->firstname;
+        $user->lastname = $request->lastname;
+        $user->email = $request->email;
+        $user->address = $request->country;
         $user->password = Hash::make($request->password);
         $user->mobile = $request->mobile_code.$request->mobile;
         $user->address = [
             'address' => '',
             'state' => '',
             'zip' => '',
-            'country' => isset($request->country) ? $request->country: null,
+//            'country' => isset($request->country) ? $request->country: null,
             'city' => ''
         ];
         $user->status = 1;
