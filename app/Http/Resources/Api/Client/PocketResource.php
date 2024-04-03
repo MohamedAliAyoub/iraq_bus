@@ -18,6 +18,8 @@ class PocketResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'amount' => showAmount($this->amount),
+            'debt_balance' => showAmount($this->debt_balance),
+            'credit_limit' => showAmount($this->credit_limit),
             'created_at' => $this->created_at->format('Y-m-d'),
         ];
     }
