@@ -16,13 +16,15 @@ class CreateDriverDetailsTable extends Migration
         Schema::create('driver_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string("first_image_id")->comment("صورة البطاقة وش");
-            $table->string("second_image_id")->comment("صورة البطاقة ضهر");
+            $table->string("first_id_card_image")->comment("صورة البطاقة وش");
+            $table->string("second_id_card_image")->comment("صورة البطاقة ضهر");
             $table->string("first_residence_card_image")->comment("صورة بطاقة السكن وش");
             $table->string("last_residence_card_image")->comment("صورة بطاقة  السكن ضهر");
+            $table->string("first_license_image")->comment("صورة الرخصة");
+            $table->string("last_license_image")->comment("صورةالرخصة ضهر");
             $table->string("record")->nullable();
             $table->string("pdf")->nullable();
-            $table->string("image")->nullable();
+            $table->string("image")->nullable()->comment("صورة الموافقة من الادمن على السائق");
             $table->tinyInteger("status");
 
 

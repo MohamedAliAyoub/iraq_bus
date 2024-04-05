@@ -722,6 +722,10 @@ function imagePath()
         'path' => 'assets/images/banner',
         'size' => '600x315'
     ];
+    $data['driver'] = [
+        'path' => 'assets/images/driver',
+        'size' => '600x315'
+    ];
     $data['agent'] = [
         'path' => 'assets/images/agent',
         'size' => '600x315'

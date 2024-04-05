@@ -15,6 +15,7 @@ class CreateDriverCarImagesTable extends Migration
     {
         Schema::create('driver_car_images', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users');
             $table->foreignId('driver_details_id')->constrained('driver_details');
             $table->string("image")->nullable();
             $table->timestamps();

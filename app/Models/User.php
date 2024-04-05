@@ -118,4 +118,13 @@ class User extends Authenticatable
         return $this->belongsTo(VehicleRoute::class , 'route_id');
     }
 
+    public function driverDetails()
+    {
+        return $this->hasOne(DriverDetails::class , 'user_id'   );
+    }
+    public function driverCarImage()
+    {
+        return $this->hasMany(DriverCarImage::class , 'user_id');
+    }
+
 }

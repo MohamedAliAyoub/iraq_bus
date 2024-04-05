@@ -44,6 +44,13 @@
                                     <span class="menu-title">@lang('All Agents')</span>
                                 </a>
                             </li>
+
+                            <li class="sidebar-menu-item {{menuActive('admin.drivers.all')}} ">
+                                <a href="{{route('admin.drivers.all')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('All_Drivers')</span>
+                                </a>
+                            </li>
                             <li class="sidebar-menu-item {{menuActive('admin.users.active')}} ">
                                 <a href="{{route('admin.users.active')}}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>

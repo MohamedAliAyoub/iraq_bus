@@ -98,6 +98,15 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('users/sms-unverified', 'ManageUsersController@smsUnverifiedUsers')->name('users.sms.unverified');
         Route::get('users/sms-verified', 'ManageUsersController@smsVerifiedUsers')->name('users.sms.verified');
 
+        //start drivers
+        Route::get('drivers', 'MangeDriverController@getAllDrivers')->name('drivers.all');
+        Route::get('drivers/{scope}/search', 'MangeDriverController@search')->name('drivers.search');
+        Route::get('driver/detail/{id}', 'MangeDriverController@detail')->name('drivers.detail');
+        Route::get('driver/create', 'MangeDriverController@create')->name('drivers.create');
+        Route::post('driver/store', 'MangeDriverController@store')->name('drivers.store');
+        Route::post('driver/update/{id}', 'MangeDriverController@update')->name('drivers.update');
+        //        end drivers
+
         Route::get('users/{scope}/search', 'ManageUsersController@search')->name('users.search');
         Route::get('user/detail/{id}', 'ManageUsersController@detail')->name('users.detail');
         Route::get('user/create', 'ManageUsersController@create')->name('users.create');

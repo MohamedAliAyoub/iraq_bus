@@ -121,7 +121,7 @@ class ManageUsersController extends Controller
 
     public function create()
     {
-        $pageTitle = 'User Detail';
+        $pageTitle = 'Create User';
         $countries = json_decode(file_get_contents(resource_path('views/partials/country.json')));
         return view('admin.users.create', compact('pageTitle', 'countries'));
     }
@@ -132,14 +132,12 @@ class ManageUsersController extends Controller
         $countryData = json_decode(file_get_contents(resource_path('views/partials/country.json')));
 
         $request->validate([
-            'debt_balance' => 'numeric|min:0',
-            'credit_limit' => 'numeric|min:0',
             'firstname' => 'required|max:50',
             'lastname' => 'required|max:50',
             'email' => 'required|email|max:90|unique:users,email',
             'mobile' => 'required|unique:users,mobile',
             'address.*' => 'required',
-            'password' => 'required|string|min:8|confirmed'
+            'password' =>  'required|confirmed|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*#?&]/',
         ]);
 
         $countryCode = $request->country;
@@ -188,7 +186,7 @@ class ManageUsersController extends Controller
             'lastname' => 'required|max:50',
             'email' => 'required|email|max:90|unique:users,email,' . $user->id,
             'mobile' => 'required|unique:users,mobile,' . $user->id,
-            'country' => 'required',
+            'address' => 'required',
         ]);
 
         $countryCode = $request->country;
