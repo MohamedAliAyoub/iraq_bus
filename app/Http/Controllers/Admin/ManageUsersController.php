@@ -137,7 +137,7 @@ class ManageUsersController extends Controller
             'email' => 'required|email|max:90|unique:users,email',
             'mobile' => 'required|unique:users,mobile',
             'address.*' => 'required',
-            'password' =>  'required|confirmed|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*#?&]/',
+            'password' => 'required|confirmed|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*#?&]/',
         ]);
 
         $countryCode = $request->country;
@@ -160,11 +160,12 @@ class ManageUsersController extends Controller
         $user->type = 2;
         $user->ev = 1;
         $user->sv = 1;
+        $user->credit_limit = $request->credit_limit,
+
         $user->save();
 
         if (!$user->pocket) {
             $user->pocket()->create([
-                'debt_balance' => $request->debt_balance,
                 'credit_limit' => $request->credit_limit,
             ]);
         }
@@ -180,8 +181,7 @@ class ManageUsersController extends Controller
         $countryData = json_decode(file_get_contents(resource_path('views/partials/country.json')));
 
         $request->validate([
-//            'debt_balance' => 'numeric|min:0',
-//            'credit_limit' => 'numeric|min:0',
+            'credit_limit' => 'numeric|min:0',
             'firstname' => 'required|max:50',
             'lastname' => 'required|max:50',
             'email' => 'required|email|max:90|unique:users,email,' . $user->id,
@@ -205,6 +205,7 @@ class ManageUsersController extends Controller
         $user->status = $request->status ? 1 : 0;
         $user->ev = $request->ev ? 1 : 0;
         $user->sv = $request->sv ? 1 : 0;
+        $user->credit_limit = $request->credit_limit,
         $user->save();
 
         $notify[] = ['success', 'User detail has been updated'];
@@ -216,12 +217,10 @@ class ManageUsersController extends Controller
 
         $user = User::findOrFail($id);
         $request->validate([
-            'debt_balance' => 'numeric|min:0',
             'credit_limit' => 'numeric|min:0',
         ]);
 
         $user->pocket->update([
-            'debt_balance' => $request->debt_balance,
             'credit_limit' => $request->credit_limit,
         ]);
 

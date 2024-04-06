@@ -54,12 +54,12 @@ class MangeDriverController extends Controller
         $user->type = User::DRIVER;
         $user->ev = 1;
         $user->sv = 1;
+        $user->credit_limit = $request->credit_limit;
         $user->save();
 
 
         if (!$user->pocket) {
             $user->pocket()->create([
-                'debt_balance' => $request->debt_balance,
                 'credit_limit' => $request->credit_limit,
             ]);
         }

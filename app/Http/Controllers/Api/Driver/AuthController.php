@@ -150,7 +150,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $mobile = $request->mobile_code . $request->mobile;
-        $credentials = ['mobile' => $mobile, 'password' => $request->password];
+        $credentials = ['mobile' => $mobile, 'password' => $request->password , 'status' => 1];
         $user = User::firstWhere(['mobile' => $mobile, 'type' => User::DRIVER]);
 
         if (!Auth::attempt($credentials) || !$user) {

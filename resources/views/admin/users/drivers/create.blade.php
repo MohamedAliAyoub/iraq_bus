@@ -78,14 +78,7 @@
                         </div>
 
                         <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="form-group ">
-                                    <label class="form-control-label font-weight-bold">@lang('Debt_balance')</label>
-                                    <input class="form-control" type="text" name="debt_balance" value="{{ old('debt_balance') }}">
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label  font-weight-bold">@lang('Credit_limit')</label>
                                     <input class="form-control" type="text" name="credit_limit" value="{{ old('credit_limit') }}">
