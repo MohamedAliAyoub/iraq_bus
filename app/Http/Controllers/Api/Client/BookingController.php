@@ -171,9 +171,9 @@ class BookingController extends Controller
 
 //        dd($trip->start_from , $trip->end_to);
 //
-        if ( is_null($booked_ticket)) {
-            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
-        }
+//        if ( is_null($booked_ticket)) {
+//            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
+//        }
 
         $startPoint = array_search($trip->start_from, array_values($trip->route->stoppages));
         $endPoint = array_search($trip->end_to, array_values($trip->route->stoppages));
