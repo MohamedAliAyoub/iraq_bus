@@ -289,10 +289,10 @@ class BookingController extends Controller
             ->where('pickup_point', $request->pickup)
             ->where('dropping_point', $request->destination)
             ->first();
-//
-//        if (is_null($booked_ticket)) {
-//            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
-//        }
+
+        if (is_null($booked_ticket)) {
+            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
+        }
 
         $vehicleRoute = VehicleRoute::where(['start_from' => $request->pickup, 'end_to' => $request->destination])->first();
         $ticketPrice = TicketPrice::where('fleet_type_id', $request->fleet_type)->where('vehicle_route_id', $vehicleRoute->id)->first();
