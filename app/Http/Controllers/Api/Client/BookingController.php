@@ -205,11 +205,6 @@ class BookingController extends Controller
         }
 
 
-        dd(
-            auth()->user()->pocket->amount + auth()->user()->pocket->credit_limit,
-            auth()->user()->pocket->amount, auth()->user()->pocket->credit_limit,
-            $subTotal
-        );
         if (auth()->user()->pocket->amount + auth()->user()->pocket->credit_limit < $subTotal) {
             return response()->json([
                 'status' => 'fail',
