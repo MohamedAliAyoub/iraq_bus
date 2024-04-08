@@ -171,7 +171,7 @@ class BookingController extends Controller
 
 //        dd($trip->start_from , $trip->end_to);
 //
-        if ($booked_ticket->count() == 0 || is_null($booked_ticket)) {
+        if ( is_null($booked_ticket)) {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
         }
 
@@ -290,7 +290,7 @@ class BookingController extends Controller
             ->where('dropping_point', $request->destination)
             ->first();
 
-        if ($booked_ticket->count() == 0 || is_null($booked_ticket)) {
+        if ( is_null($booked_ticket)) {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
         }
 
