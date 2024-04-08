@@ -226,7 +226,6 @@ class MangeDriverController extends Controller
         $pageTitle = 'Driver Detail';
         $user = User::with(['driverDetails', 'driverCarImage'])->findOrFail($id);
         $countries = json_decode(file_get_contents(resource_path('views/partials/country.json')));
-        dd($user);
         return view('admin.users.drivers.detail', compact('pageTitle', 'user', 'countries'));
     }
 
