@@ -205,6 +205,11 @@ class BookingController extends Controller
         }
 
 
+        dd(
+            auth()->user()->pocket->amount + auth()->user()->pocket->credit_limit,
+            auth()->user()->pocket->amount, auth()->user()->pocket->credit_limit,
+            $subTotal
+        );
         if (auth()->user()->pocket->amount + auth()->user()->pocket->credit_limit < $subTotal) {
             return response()->json([
                 'status' => 'fail',
@@ -290,7 +295,7 @@ class BookingController extends Controller
             ->where('dropping_point', $request->destination)
             ->first();
 
-        if ( is_null($booked_ticket)) {
+        if (is_null($booked_ticket)) {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
         }
 
@@ -400,9 +405,8 @@ class BookingController extends Controller
         ]);
 
 
-
         if (auth()->user()->pocket->debt_balance > 0 && auth()->user()->pocket->debt_balance <= $ticket->sub_total) {
-            $amount =   $ticket->sub_total - auth()->user()->pocket->debt_balance;
+            $amount = $ticket->sub_total - auth()->user()->pocket->debt_balance;
             auth()->user()->pocket->update(
                 [
                     'debt_balance' => 0,
