@@ -289,10 +289,10 @@ class BookingController extends Controller
             ->where('pickup_point', $request->pickup)
             ->where('dropping_point', $request->destination)
             ->first();
-
-        if (is_null($booked_ticket)) {
-            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
-        }
+//
+//        if (is_null($booked_ticket)) {
+//            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
+//        }
 
         $vehicleRoute = VehicleRoute::where(['start_from' => $request->pickup, 'end_to' => $request->destination])->first();
         $ticketPrice = TicketPrice::where('fleet_type_id', $request->fleet_type)->where('vehicle_route_id', $vehicleRoute->id)->first();
@@ -302,7 +302,12 @@ class BookingController extends Controller
         })->toArray();
 
         if (auth()->user()->pocket->amount + auth()->user()->pocket->credit_limit < $booked_ticket->sub_total) {
-            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('you_dont_have_enough_money')])->setStatusCode(400);
+            return response()->json(
+                [
+                    'status' => 'fail',
+                    'data' => null,
+                    'message' => trans('you_dont_have_enough_money')])
+                ->setStatusCode(400);
         }
         $pnr_number = getTrx(10);
         $bookedTicket = BookedTicket::create([
