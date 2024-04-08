@@ -163,27 +163,25 @@ class AgentDepositController extends Controller
         $user = $deposit->user;
 
         $pocket = $user->pocket;
-        $pocket->increment('amount', $deposit->amount);
 
 
-
-        if(auth()->user()->pocket->debt_balance > 0 && auth()->user()->pocket->debt_balance <= $deposit->amount) {
-            $amount = auth()->user()->pocket->debt_balance - $deposit->amount ;
-            auth()->user()->pocket->update(
+        if($pocket->debt_balance > 0 && $pocket->debt_balance <= $deposit->amount) {
+            $amount = $pocket->debt_balance - $deposit->amount ;
+            $pocket->update(
                 [
                     'debt_balance'=> 0,
-                    'amount' => $amount + auth()->user()->pocket->amout
+                    'amount' => $amount + $pocket->amount
                 ]);
 
         }
-        elseif (auth()->user()->pocket->debt_balance > 0 &&  auth()->user()->pocket->debt_balance > $deposit->amount)
+        elseif ($pocket->debt_balance > 0 &&  $pocket->debt_balance > $deposit->amount)
         {
-            auth()->user()->pocket->decrement('debt_balance',$deposit->amount);
+            $pocket->decrement('debt_balance',$deposit->amount);
 
         }
         else
         {
-            auth()->user()->pocket->increment('amount' ,  $deposit->amount);
+            $pocket->increment('amount' ,  $deposit->amount);
         }
 
 
