@@ -25,7 +25,6 @@ class BookSpecialBookingRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'pickup'               =>'required',
             'destination'          =>'required',
             'pickup'               => ['different:destination', 'required'],
             'type'                 =>'nullable|in:go,back',

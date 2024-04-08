@@ -160,7 +160,7 @@ class ManageUsersController extends Controller
         $user->type = 2;
         $user->ev = 1;
         $user->sv = 1;
-        $user->credit_limit = $request->credit_limit,
+        $user->credit_limit = $request->credit_limit;
 
         $user->save();
 
@@ -205,7 +205,6 @@ class ManageUsersController extends Controller
         $user->status = $request->status ? 1 : 0;
         $user->ev = $request->ev ? 1 : 0;
         $user->sv = $request->sv ? 1 : 0;
-        $user->credit_limit = $request->credit_limit,
         $user->save();
 
         $notify[] = ['success', 'User detail has been updated'];
@@ -218,6 +217,10 @@ class ManageUsersController extends Controller
         $user = User::findOrFail($id);
         $request->validate([
             'credit_limit' => 'numeric|min:0',
+        ]);
+
+        $user->update([
+            'credit_limit' => $request->credit_limit,
         ]);
 
         $user->pocket->update([

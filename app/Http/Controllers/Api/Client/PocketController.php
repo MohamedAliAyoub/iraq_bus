@@ -93,6 +93,7 @@ class PocketController extends Controller
 //    $pocket = auth()->user()->pocket;
 //    $pocket->increment('amount', $amount);
 
+
         return response()->json(['status' => 'success', 'data' => AgentDepositResource::make($agent_deposit), 'message' => 'The charge request sent successfully'])->setStatusCode(200);
     }
 

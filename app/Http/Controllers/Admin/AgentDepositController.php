@@ -165,6 +165,28 @@ class AgentDepositController extends Controller
         $pocket = $user->pocket;
         $pocket->increment('amount', $deposit->amount);
 
+
+
+        if(auth()->user()->pocket->debt_balance > 0 && auth()->user()->pocket->debt_balance <= $deposit->amount) {
+            $amount = auth()->user()->pocket->debt_balance - $deposit->amount ;
+            auth()->user()->pocket->update(
+                [
+                    'debt_balance'=> 0,
+                    'amount' => $amount + auth()->user()->pocket->amout
+                ]);
+
+        }
+        elseif (auth()->user()->pocket->debt_balance > 0 &&  auth()->user()->pocket->debt_balance > $deposit->amount)
+        {
+            auth()->user()->pocket->decrement('debt_balance',$deposit->amount);
+
+        }
+        else
+        {
+            auth()->user()->pocket->increment('amount' ,  $deposit->amount);
+        }
+
+
 //        $general = GeneralSetting::first();
 //        notify($user, 'PAYMENT_APPROVE', [
 //            'method_name' => $deposit->gatewayCurrency()->name,
