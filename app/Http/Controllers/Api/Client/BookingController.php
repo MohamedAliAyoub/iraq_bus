@@ -241,10 +241,6 @@ class BookingController extends Controller
             ]);
         }
 
-        //history
-
-
-
 
         if (auth()->user()->pocket->amount == 0) {
             auth()->user()->pocket->increment('debt_balance', $bookedTicket->sub_total);
@@ -294,6 +290,7 @@ class BookingController extends Controller
             ->where('dropping_point', $request->destination)
             ->first();
 
+//        dd($booked_ticket);
         if (is_null($booked_ticket)) {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
         }
@@ -426,7 +423,7 @@ class BookingController extends Controller
             'type' => History::CANCEL_TICKET,
             'amount' => $ticket->sub_total,
             'creditor' => $ticket->sub_total,
-            'total' => auth()->user()->pocket->amount + $ticket->sub_total
+            'total' => auth()->user()->pocket->amount
         ]);
         return response()->json(['status' => 'success', 'data' => null, 'message' => 'message.deleted_successfuly'])->setStatusCode(200);
 
