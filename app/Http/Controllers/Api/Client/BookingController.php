@@ -243,30 +243,34 @@ class BookingController extends Controller
 
         //history
 
-        History::create([
-            'booked_ticket_id' => $bookedTicket->id,
-            'user_id' => $bookedTicket->user_id,
-            'type' => History::BOOK_TICKET,
-            'amount' => $bookedTicket->sub_total,
-            'debtor' => $subTotal,
-            'total' => auth()->user()->pocket->amount - $subTotal
-        ]);
+
 
 
         if (auth()->user()->pocket->amount == 0) {
             auth()->user()->pocket->increment('debt_balance', $bookedTicket->sub_total);
+            auth()->user()->pocket->decrement('credit_limit', $bookedTicket->sub_total);
         } elseif (auth()->user()->pocket->amount < $subTotal) {
             // after Subtracts amount it = 0.00 and get Subtracts from  debt_balance
             $debt = $subTotal - auth()->user()->pocket->amount - auth()->user()->pocket->debt_balance;
             auth()->user()->pocket->update(
                 [
                     'amount' => 0,
-                    'debt_balance' => $debt
+                    'debt_balance' =>auth()->user()->pocket->debt_balance - $debt,
+                    'credit_limit' => auth()->user()->pocket->credit_limit + $debt
                 ]);
         } elseif (auth()->user()->pocket->amount > $subTotal) {
             auth()->user()->pocket->update(['amount' => auth()->user()->pocket->amount - $bookedTicket->sub_total]);
 
         }
+
+        History::create([
+            'booked_ticket_id' => $bookedTicket->id,
+            'user_id' => $bookedTicket->user_id,
+            'type' => History::BOOK_TICKET,
+            'amount' => $bookedTicket->sub_total,
+            'debtor' => $subTotal,
+            'total' => auth()->user()->pocket->amount
+        ]);
 
 
         return response()->json(['status' => 'success', 'data' => TicketDirectBookingResource::make($bookedTicket), 'message' => trans('messages.data_found')])->setStatusCode(200);
@@ -342,6 +346,25 @@ class BookingController extends Controller
             ]);
         }
 
+
+
+
+        if (auth()->user()->pocket->amount == 0) {
+            auth()->user()->pocket->increment('debt_balance', $bookedTicket->sub_total);
+            auth()->user()->pocket->decrement('credit_limit', $bookedTicket->sub_total);
+
+        } elseif (auth()->user()->pocket->amount < (double)$booked_ticket->sub_total) {
+            $debt = $booked_ticket->sub_total - auth()->user()->pocket->amount;
+            auth()->user()->pocket->update(
+                [
+                    'amount' => 0,
+                    'debt_balance' => auth()->user()->pocket->debt_balance - $debt,
+                    'credit_limit' => auth()->user()->pocket->credit_limit + $debt
+                ]);
+        } elseif (auth()->user()->pocket->amount >= (double)$booked_ticket->sub_total) {
+            auth()->user()->pocket->decrement('amount', $bookedTicket->sub_total);
+        }
+
         //history
         History::create([
             'booked_ticket_id' => $bookedTicket->id,
@@ -349,23 +372,8 @@ class BookingController extends Controller
             'type' => History::BOOK_TICKET,
             'amount' => $bookedTicket->sub_total,
             'debtor' => $bookedTicket->sub_total,
-            'total' => auth()->user()->pocket->amount - $bookedTicket->sub_total
+            'total' => auth()->user()->pocket->amount
         ]);
-
-
-        if (auth()->user()->pocket->amount == 0) {
-            auth()->user()->pocket->increment('debt_balance', $bookedTicket->sub_total);
-        } elseif (auth()->user()->pocket->amount < (double)$booked_ticket->sub_total) {
-            $debt = $booked_ticket->sub_total - auth()->user()->pocket->amount;
-            auth()->user()->pocket->update(
-                [
-                    'amount' => 0,
-                    'debt_balance' => auth()->user()->pocket->debt_balance - $debt
-                ]);
-        } elseif (auth()->user()->pocket->amount >= (double)$booked_ticket->sub_total) {
-            $debt = $booked_ticket->sub_total - auth()->user()->pocket->amount;
-            auth()->user()->pocket->decrement('amount', $bookedTicket->sub_total);
-        }
 
         return response()->json(['status' => 'success', 'data' => TicketSpecialBookingResource::make($bookedTicket), 'message' => trans('messages.data_found')])->setStatusCode(200);
 
@@ -394,6 +402,23 @@ class BookingController extends Controller
         }
         $ticket->update(['status' => 3]);
 
+
+        if (auth()->user()->pocket->debt_balance > 0 && auth()->user()->pocket->debt_balance <= $ticket->sub_total) {
+            $amount = $ticket->sub_total - auth()->user()->pocket->debt_balance;
+            auth()->user()->pocket->update(
+                [
+                    'debt_balance' => 0,
+                    'credit_limit' =>  auth()->user()->pocket->credit_limit +auth()->user()->pocket->debt_balance ,
+                    'amount' => $amount + auth()->user()->pocket->amount
+                ]);
+
+        } elseif (auth()->user()->pocket->debt_balance > 0 && auth()->user()->pocket->debt_balance > $ticket->sub_total) {
+            auth()->user()->pocket->decrement('debt_balance', $ticket->sub_total);
+            auth()->user()->pocket->increment('credit_limit', $ticket->sub_total);
+        } else {
+            auth()->user()->pocket->increment('amount', $ticket->sub_total);
+        }
+
         //history
         History::create([
             'booked_ticket_id' => $ticket->id,
@@ -403,21 +428,6 @@ class BookingController extends Controller
             'creditor' => $ticket->sub_total,
             'total' => auth()->user()->pocket->amount + $ticket->sub_total
         ]);
-
-
-        if (auth()->user()->pocket->debt_balance > 0 && auth()->user()->pocket->debt_balance <= $ticket->sub_total) {
-            $amount = $ticket->sub_total - auth()->user()->pocket->debt_balance;
-            auth()->user()->pocket->update(
-                [
-                    'debt_balance' => 0,
-                    'amount' => $amount + auth()->user()->pocket->amount
-                ]);
-
-        } elseif (auth()->user()->pocket->debt_balance > 0 && auth()->user()->pocket->debt_balance > $ticket->sub_total) {
-            auth()->user()->pocket->decrement('debt_balance', $ticket->sub_total);
-        } else {
-            auth()->user()->pocket->increment('amount', $ticket->sub_total);
-        }
         return response()->json(['status' => 'success', 'data' => null, 'message' => 'message.deleted_successfuly'])->setStatusCode(200);
 
     }

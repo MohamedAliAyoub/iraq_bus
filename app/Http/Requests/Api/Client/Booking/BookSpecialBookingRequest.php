@@ -34,10 +34,10 @@ class BookSpecialBookingRequest extends FormRequest
             'responsible_name'     =>'required',
             'responsible_phone'    =>'required',
             'passenger_numbers'    => ['required', 'numeric'],
-            'seats'                => ['required', 'array'],
-            'seats.*.gender'       => ['required', 'string'],
-            'seats.*.client_name'  => ['required', 'string'],
-            'seats.*.client_phone' => ['required', 'string'],
+//            'seats'                => ['required', 'array'],
+//            'seats.*.gender'       => ['required', 'string'],
+//            'seats.*.client_name'  => ['required', 'string'],
+//            'seats.*.client_phone' => ['required', 'string'],
         ];
 
         if (auth()->user()->type == 2) {

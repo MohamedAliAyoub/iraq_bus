@@ -167,7 +167,6 @@ class ManageUsersController extends Controller
         if (!$user->pocket) {
             $user->pocket()->create([
                 'credit_limit' => $request->credit_limit,
-                'debt_balance' => $request->credit_limit
             ]);
         }
 
