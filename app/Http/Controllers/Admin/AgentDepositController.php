@@ -170,6 +170,7 @@ class AgentDepositController extends Controller
             $pocket->update(
                 [
                     'debt_balance'=> 0,
+                    'credit_limit' =>  $pocket->credit_limit + $pocket->debt_balance,
                     'amount' => $amount + $pocket->amount
                 ]);
 
@@ -177,6 +178,7 @@ class AgentDepositController extends Controller
         elseif ($pocket->debt_balance > 0 &&  $pocket->debt_balance > $deposit->amount)
         {
             $pocket->decrement('debt_balance',$deposit->amount);
+            $pocket->increment('credit_limit',$deposit->amount);
 
         }
         else
