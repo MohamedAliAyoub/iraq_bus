@@ -55,7 +55,6 @@ class MangeDriverController extends Controller
         $user->type = User::DRIVER;
         $user->ev = 1;
         $user->sv = 1;
-        $user->credit_limit = $request->credit_limit;
         $user->save();
 
 

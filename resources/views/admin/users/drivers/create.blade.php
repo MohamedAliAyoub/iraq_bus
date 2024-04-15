@@ -85,14 +85,6 @@
                         </div>
 
                         <div class="row mt-4">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="form-control-label  font-weight-bold">@lang('Credit_limit')</label>
-                                    <input class="form-control" type="text" name="credit_limit" value="{{ old('credit_limit') }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4">
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label class="form-control-label font-weight-bold">@lang('first_id_card_image')</label>

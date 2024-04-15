@@ -24,8 +24,6 @@ class DriverStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'debt_balance' => 'numeric|min:0',
-            'credit_limit' => 'numeric|min:0',
             'firstname' => 'required|max:50',
             'username' => 'required|max:50',
             'lastname' => 'required|max:50',
