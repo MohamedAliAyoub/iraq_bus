@@ -166,7 +166,7 @@ class AgentDepositController extends Controller
 
 
         if($pocket->debt_balance > 0 && $pocket->debt_balance <= $deposit->amount) {
-            $amount = $pocket->debt_balance - $deposit->amount ;
+            $amount = $deposit->amount -$pocket->debt_balance   ;
             $pocket->update(
                 [
                     'debt_balance'=> 0,
