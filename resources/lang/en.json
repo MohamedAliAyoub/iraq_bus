@@ -6,5 +6,6 @@
  "ApproveImage" :" Approve Image",
  "PDF" :" PDF",
  "Record" :"Record",
+ "you_dont_have_enough_money" : "you dont have enough money",
  "Ticket_Does_Not_Exist": "Ticket does not exist"
 }
