@@ -251,8 +251,8 @@ class BookingController extends Controller
             auth()->user()->pocket->update(
                 [
                     'amount' => 0,
-                    'debt_balance' =>auth()->user()->pocket->debt_balance - $debt,
-                    'credit_limit' => auth()->user()->pocket->credit_limit + $debt
+                    'debt_balance' => auth()->user()->pocket->debt_balance + $debt,
+                    'credit_limit' => auth()->user()->pocket->credit_limit - $debt
                 ]);
         } elseif (auth()->user()->pocket->amount > $subTotal) {
             auth()->user()->pocket->update(['amount' => auth()->user()->pocket->amount - $bookedTicket->sub_total]);
@@ -281,19 +281,22 @@ class BookingController extends Controller
      */
     public function bookSpecialBooking(BookSpecialBookingRequest $request)
     {
+        $dayGoDate = Carbon::parse($request->go_date)->format('w');
+        $dayBackDate = $request->back_date ? Carbon::parse($request->back_date)->format('w') : '';
 
-        $booked_ticket = BookedTicket::where('user_id', auth()->user()->id)
-            ->where('date_of_journey', Carbon::parse($request->go_date)->format('Y-m-d'))
-            ->where('back_date', Carbon::parse($request->back_date)->format('Y-m-d'))
+        $booked_ticket = BookedTicket::where("user_id" , auth()->id())
+            ->where('date_of_journey', $dayGoDate)
+            ->where('back_date', $dayBackDate)
             ->whereIn('status', [1, 2])
             ->where('pickup_point', $request->pickup)
             ->where('dropping_point', $request->destination)
             ->first();
 
-//        dd($booked_ticket);
-        if (is_null($booked_ticket)) {
-            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
-        }
+
+
+//        if (is_null($booked_ticket)) {
+//            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
+//        }
 
         $vehicleRoute = VehicleRoute::where(['start_from' => $request->pickup, 'end_to' => $request->destination])->first();
         $ticketPrice = TicketPrice::where('fleet_type_id', $request->fleet_type)->where('vehicle_route_id', $vehicleRoute->id)->first();
@@ -302,7 +305,11 @@ class BookingController extends Controller
             return 1 . '-' . $seat->name;
         })->toArray();
 
-        if (auth()->user()->pocket->amount + auth()->user()->pocket->credit_limit < $booked_ticket->sub_total) {
+
+        $sub_total =  $seats->sum('price');
+
+
+        if (auth()->user()->pocket->amount + auth()->user()->pocket->credit_limit < $sub_total) {
             return response()->json(
                 [
                     'status' => 'fail',
@@ -324,7 +331,7 @@ class BookingController extends Controller
             'back_date' => $request->back_date ? Carbon::parse($request->back_date)->format('Y-m-d') : null,
             'pnr_number' => $pnr_number,
             'status' => 2,
-            'sub_total' => $booked_ticket->sub_total,
+            'sub_total' => $sub_total,
             'passenger_numbers' => $request->passenger_numbers,
             'responsible_name' => $request->responsible_name,
             'responsible_phone' => $request->responsible_phone,
@@ -344,22 +351,20 @@ class BookingController extends Controller
         }
 
 
-
-
         if (auth()->user()->pocket->amount == 0) {
             auth()->user()->pocket->increment('debt_balance', $bookedTicket->sub_total);
             auth()->user()->pocket->decrement('credit_limit', $bookedTicket->sub_total);
 
-        } elseif (auth()->user()->pocket->amount < (double)$booked_ticket->sub_total) {
-            $debt = $booked_ticket->sub_total - auth()->user()->pocket->amount;
+        } elseif (auth()->user()->pocket->amount < (double)$sub_total) {
+            $debt = $sub_total - auth()->user()->pocket->amount;
             auth()->user()->pocket->update(
                 [
                     'amount' => 0,
-                    'debt_balance' => auth()->user()->pocket->debt_balance - $debt,
-                    'credit_limit' => auth()->user()->pocket->credit_limit + $debt
+                    'debt_balance' => auth()->user()->pocket->debt_balance + $debt,
+                    'credit_limit' => auth()->user()->pocket->credit_limit - $debt
                 ]);
-        } elseif (auth()->user()->pocket->amount >= (double)$booked_ticket->sub_total) {
-            auth()->user()->pocket->decrement('amount', $bookedTicket->sub_total);
+        } elseif (auth()->user()->pocket->amount >= (double)$sub_total) {
+            auth()->user()->pocket->decrement('amount', $sub_total);
         }
 
         //history
@@ -367,8 +372,8 @@ class BookingController extends Controller
             'booked_ticket_id' => $bookedTicket->id,
             'user_id' => $bookedTicket->user_id,
             'type' => History::BOOK_TICKET,
-            'amount' => $bookedTicket->sub_total,
-            'debtor' => $bookedTicket->sub_total,
+            'amount' => $sub_total,
+            'debtor' => $sub_total,
             'total' => auth()->user()->pocket->amount
         ]);
 
@@ -405,7 +410,7 @@ class BookingController extends Controller
             auth()->user()->pocket->update(
                 [
                     'debt_balance' => 0,
-                    'credit_limit' =>  auth()->user()->pocket->credit_limit +auth()->user()->pocket->debt_balance ,
+                    'credit_limit' => auth()->user()->pocket->credit_limit + auth()->user()->pocket->debt_balance,
                     'amount' => $amount + auth()->user()->pocket->amount
                 ]);
 
