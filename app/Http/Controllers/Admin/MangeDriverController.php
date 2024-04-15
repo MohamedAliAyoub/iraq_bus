@@ -39,6 +39,7 @@ class MangeDriverController extends Controller
         $user->mobile = $request->mobile;
         $user->country_code = $countryCode;
         $user->firstname = $request->firstname;
+        $user->username = $request->username;
         $user->lastname = $request->lastname;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);

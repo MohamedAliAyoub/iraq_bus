@@ -27,6 +27,7 @@ class DriverStoreRequest extends FormRequest
             'debt_balance' => 'numeric|min:0',
             'credit_limit' => 'numeric|min:0',
             'firstname' => 'required|max:50',
+            'username' => 'required|max:50',
             'lastname' => 'required|max:50',
             'email' => 'required|email|max:90|unique:users,email',
             'mobile' => 'required|unique:users,mobile',

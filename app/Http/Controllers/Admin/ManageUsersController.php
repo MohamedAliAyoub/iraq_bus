@@ -133,6 +133,7 @@ class ManageUsersController extends Controller
 
         $request->validate([
             'firstname' => 'required|max:50',
+            'username' => 'required|max:50',
             'lastname' => 'required|max:50',
             'email' => 'required|email|max:90|unique:users,email',
             'mobile' => 'required|unique:users,mobile',
@@ -146,6 +147,7 @@ class ManageUsersController extends Controller
         $user->country_code = $countryCode;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
+        $user->username = $request->username;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
 
