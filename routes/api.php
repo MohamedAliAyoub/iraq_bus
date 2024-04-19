@@ -127,7 +127,9 @@ Route::namespace('Api\Driver')->name('driver.')->prefix('v1/driver')->group(func
 		});
 		
 		Route::prefix('trips')->group(function(){
-			Route::get('/','TripController@getTrips');
+            Route::get('/','TripController@getTrips');
+            Route::get('/all','TripController@getAlltrips');//without details
+            Route::get('show/{trip}','TripController@show');
 			Route::post('start','TripController@startTrip');
 			Route::post('transfer','TripController@transferTrip');
 		});

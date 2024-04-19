@@ -23,13 +23,42 @@ class TripController extends Controller
      * All Trips
      * @return TripResource
      */
-    public function getTrips( )
+    public function getTrips(Request $request)
     {
       $user = auth()->user();
-      $trips = Trip::where(['fleet_type_id'=>$user->fleet_type_id ,
-      'vehicle_route_id'=>$user->route_id,'status'=>1 ])
-      ->with(['bookedTickets','bookedTickets.user'])->paginate(getPaginate());
+
+        $query = Trip::where([
+            'fleet_type_id' => $user->fleet_type_id,
+            'vehicle_route_id' => $user->route_id,
+            'status' => 1
+        ]);
+
+        if ($request->has('bookedTickets')) {
+            $trips = $query->with(['bookedTickets', 'bookedTickets.user'])->paginate(getPaginate());
+        } else {
+            $trips = $query->paginate(getPaginate());
+        }
       return response()->json(['status' => 'success','data'=> TripResource::collection($trips)->response()->getData() ,'message'=>''])->setStatusCode(200);
+    }
+
+    /**
+     *
+     * All Trips
+     * @return TripResource
+     */
+    public function getAllTrips( )
+    {
+        $user = auth()->user();
+        $trips = Trip::where(['fleet_type_id'=>$user->fleet_type_id ,
+            'vehicle_route_id'=>$user->route_id,'status'=>1 ])
+            ->with(['bookedTickets','bookedTickets.user'])->paginate(getPaginate());
+        return response()->json(['status' => 'success','data'=> TripResource::collection($trips)->response()->getData() ,'message'=>''])->setStatusCode(200);
+    }
+
+    public function show(Trip $trip)
+    {
+        $trips = Trip::with(['bookedTickets','bookedTickets.user'])->paginate(getPaginate());
+        return response()->json(['status' => 'success','data'=> TripResource::collection($trips)->response()->getData() ,'message'=>''])->setStatusCode(200);
     }
 
      /**
