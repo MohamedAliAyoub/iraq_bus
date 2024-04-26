@@ -21,7 +21,7 @@ class DriverTrips extends Model
 
     public function trip(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Trip::class, 'trip_id');
+        return $this->belongsTo(Trip::class);
     }
 
     public function driver(): \Illuminate\Database\Eloquent\Relations\BelongsTo

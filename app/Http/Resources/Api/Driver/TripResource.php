@@ -14,13 +14,16 @@ class TripResource extends JsonResource
      */
     public function toArray($request)
     {
+
         $data = [
-            'id' => $this->id,
-            'name' => $this->title,
+            'id' => $this->trip->id,
+            'date' => $this->date,
+            'time' => $this->trip->schedule->start_from,
+            'name' => $this->trip->title,
         ];
 
-        if ($this->relationLoaded('bookedTickets')) {
-            $data['tickets'] = TicketResource::collection($this->bookedTickets);
+        if ($this->trip && $this->trip->relationLoaded('bookedTickets')) {
+            $data['tickets'] = TicketResource::collection($this->trip->bookedTickets);
         }
 
         return $data;

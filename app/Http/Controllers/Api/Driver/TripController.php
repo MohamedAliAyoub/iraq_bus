@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Driver;
 
+use App\Models\DriverTrips;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Driver\TripResource;
@@ -27,10 +28,12 @@ class TripController extends Controller
     {
       $user = auth()->user();
 
-        $query = Trip::whereHas('driverTrips');
+        $query = DriverTrips::query()->with('trip')->where('driver_id' , $user->id);
 
         if ($request->has('bookedTickets')) {
-            $trips = $query->with(['bookedTickets', 'bookedTickets.user'])->paginate(getPaginate());
+            $trips = $query->with(['trip' => function($q){
+                $q->with(['bookedTickets', 'bookedTickets.user']);
+            }])->paginate(getPaginate());
         } else {
             $trips = $query->paginate(getPaginate());
         }
