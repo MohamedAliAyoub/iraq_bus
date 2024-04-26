@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FleetType extends Model
 {
     protected $guarded = ['id'];
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url' , 'total_seats'];
     protected $casts = [
         'deck_seats' => 'object',
         'facilities' => 'array'
@@ -16,6 +16,10 @@ class FleetType extends Model
     public function getImageUrlAttribute()
     {
         return $this->image ? asset('assets/images/fleet_type/' . $this->image) : null;
+    }
+    public function getTotalSeatsAttribute()
+    {
+        return array_sum($this->deck_seats);
     }
     public function vehicles(){
         return $this->hasMany(Vehicle::class);
@@ -34,4 +38,6 @@ class FleetType extends Model
     {
         return $this->hasMany(User::class);
     }
+
+
 }

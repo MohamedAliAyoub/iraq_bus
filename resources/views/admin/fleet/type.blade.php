@@ -35,7 +35,7 @@
                                         {{ __($item->deck) }}
                                     </td>
                                     <td data-label="@lang('Total Seat')">
-                                        {{ array_sum($item->deck_seats) }}
+                                        {{ $item->total_seats }}
                                     </td>
                                     <td data-label="@lang('Facilities')">
                                         @if ($item->facilities)

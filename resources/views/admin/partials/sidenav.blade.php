@@ -101,6 +101,30 @@
                         </ul>
                     </div>
                 </li>
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)" class="{{menuActive('admin.drivers*' , 3)}}">
+                        <i class="menu-icon las la-users"></i>
+                        <span class="menu-title">@lang('manage_drivers')</span>
+
+                    </a>
+                    <div class="sidebar-submenu {{menuActive('admin.drivers*')}} ">
+                        <ul>
+                            <li class="sidebar-menu-item {{menuActive('admin.drivers.all' )}} ">
+                                <a href="{{route('admin.drivers.all')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('All_Drivers')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.trips.all' )}} ">
+                                <a href="{{route('admin.trip.driver.list')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('all_trips_monthly')</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </li>
 
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{menuActive('admin.deposit*',3)}}">
@@ -144,6 +168,7 @@
                         </ul>
                     </div>
                 </li>
+
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{menuActive('admin.deposit*',3)}}">
                         <i class="menu-icon las la-credit-card"></i>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Client;
 
+use App\Models\DriverTrips;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Client\Booking\SearchDirectBookingRequest;
@@ -21,6 +22,7 @@ use App\Http\Resources\Api\Client\TicketDirectBookingResource;
 use App\Http\Resources\Api\Client\SpecialBookingResource;
 use App\Http\Resources\Api\Client\TicketSpecialBookingResource;
 use App\Http\Resources\Api\Client\bookSpecialBookingResource;
+use Illuminate\Support\Facades\DB;
 
 
 class BookingController extends Controller
@@ -169,6 +171,30 @@ class BookingController extends Controller
             ->where('dropping_point', $trip->end_to)
             ->first();
 
+        $driver_trips = DriverTrips::where([
+            'trip_id' => $trip->id,
+            'date' => Carbon::parse($request->go_date)->format('Y-m-d'),
+        ])->first();
+
+       if ($driver_trips != null)
+        if ($driver_trips->booked_count + count( $request->seats ) > $driver_trips->total_seats  )
+            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('car_completed')])->setStatusCode(400);
+
+
+        $driver_trips = DriverTrips::query()->updateOrCreate(
+            [
+                'trip_id' => $trip->id,
+                'date' => Carbon::parse($request->go_date)->format('Y-m-d'),
+            ],
+            [
+                'booked_count' => DB::raw('booked_count + ' . sizeof($request->seats)), // Increment booked_count
+                'trip_id' => $trip->id,
+                'date' => Carbon::parse($request->go_date)->format('Y-m-d'),
+            ]
+        );
+
+
+
 //        dd($trip->start_from , $trip->end_to);
 //
 //        if ( is_null($booked_ticket)) {
@@ -213,6 +239,7 @@ class BookingController extends Controller
                 ->setStatusCode(400);
         }
 
+
         $pnr_number = getTrx(10);
         $bookedTicket = BookedTicket::create([
             'user_id' => auth()->user()->id,
@@ -230,6 +257,7 @@ class BookingController extends Controller
             'status' => 2,
             'sub_total' => $subTotal,
         ]);
+
 
         foreach ($request->seats as $seat) {
             BookedSeat::create([
@@ -284,14 +312,13 @@ class BookingController extends Controller
         $dayGoDate = Carbon::parse($request->go_date)->format('w');
         $dayBackDate = $request->back_date ? Carbon::parse($request->back_date)->format('w') : '';
 
-        $booked_ticket = BookedTicket::where("user_id" , auth()->id())
+        $booked_ticket = BookedTicket::where("user_id", auth()->id())
             ->where('date_of_journey', $dayGoDate)
             ->where('back_date', $dayBackDate)
             ->whereIn('status', [1, 2])
             ->where('pickup_point', $request->pickup)
             ->where('dropping_point', $request->destination)
             ->first();
-
 
 
 //        if (is_null($booked_ticket)) {
@@ -306,7 +333,7 @@ class BookingController extends Controller
         })->toArray();
 
 
-        $sub_total =  $seats->sum('price');
+        $sub_total = $seats->sum('price');
 
 
         if (auth()->user()->pocket->amount + auth()->user()->pocket->credit_limit < $sub_total) {

@@ -47,6 +47,7 @@ class User extends Authenticatable
 
 
 
+    protected $appends = ["full_name"];
 
     public function login_logs()
     {

@@ -194,6 +194,9 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
 
             //trip
             Route::get('trip', 'ManageTripController@trips')->name('list');
+            Route::get('driver-trip', 'ManageTripController@driverTrips')->name('driver.list');
+            Route::post('assign_driver/{id}', 'ManageTripController@assignDriver')->name('driver.assign');
+
             Route::post('trip', 'ManageTripController@tripStore')->name('store');
             Route::post('trip/update/{id}', 'ManageTripController@tripUpdate')->name('update');
             Route::post('trip/active-disable', 'ManageTripController@tripActiveDisable')->name('active.disable');

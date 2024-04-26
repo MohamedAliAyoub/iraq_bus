@@ -5,5 +5,18 @@
   "PDF" :"ملف الموافقة",
   "Record" :"التسجيل الصوتي للموافقة",
   "Ticket_Does_Not_Exist": "لا توجد تزكرة محجوزة",
-  "you_dont_have_enough_money" : "عفوا . ليس لديك مال كافي"
+  "you_dont_have_enough_money" : "عفوا . ليس لديك مال كافي",
+  "car_completed": "لقد اكتملت السيارة لا يمكنك الحجز فيها ",
+  "manage_drivers" : "ادارة السائقين",
+  "trips" : "الرحلات",
+  "all_trips_monthly": "كل الرحلات الشهر",
+  "DRIVER_ACCEPT": "تم الموافقة من السائق",
+  "PENDING": "معلق",
+  "DRIVER_CANCEL": "تم الرفض",
+  "assign_driver_successfully":"تم اضافة السائق بنجاح"
+
+
+
+
+
 }
