@@ -8,15 +8,15 @@
                     <div class="table-responsive--sm table-responsive">
                         <table class="table table--light style--two">
                             <thead>
-                                <tr>
-                                    <th>@lang('Title')</th>
-                                    <th>@lang('Date')</th>
-                                    <th>@lang('Start From')</th>
-                                    <th>@lang('End To')</th>
-                                    <th>@lang('Driver')</th>
-                                    <th>@lang('Status')</th>
-                                    <th>@lang('Action')</th>
-                                </tr>
+                            <tr>
+                                <th>@lang('Title')</th>
+                                <th>@lang('Date')</th>
+                                <th>@lang('Start From')</th>
+                                <th>@lang('End To')</th>
+                                <th>@lang('Driver')</th>
+                                <th>@lang('Status')</th>
+                                <th>@lang('Action')</th>
+                            </tr>
                             </thead>
                             <tbody>
                             @forelse($trips as $item)
@@ -42,11 +42,17 @@
 
                                     <td data-label="@lang('Status')">
                                         @if($item->status == 1)
-                                        <span class="text--small badge font-weight-normal badge--success">@lang('DRIVER_ACCEPT')</span>
+                                            <span class="text--small badge font-weight-normal badge--success">@lang('DRIVER_ACCEPT')</span>
                                         @elseif($item->status == 2)
-                                                <span class="text--small badge font-weight-normal badge--danger">@lang('DRIVER_CANCEL')</span>
+                                            <span class="text--small badge font-weight-normal badge--danger">@lang('DRIVER_CANCEL')</span>
+                                        @elseif($item->status == 3)
+                                            <span class="text--small badge font-weight-normal badge--success">@lang('SUCCESS')</span>
+                                        @elseif($item->status == 4)
+                                            <span class="text--small badge font-weight-normal badge--success">@lang('IN_PROGRESS')</span>
+                                        @elseif($item->status == 5)
+                                            <span class="text--small badge font-weight-normal badge--danger">@lang('TRANSFER')</span>
                                         @else
-                                        <span class="text--small badge font-weight-normal badge--warning">@lang('PENDING')</span>
+                                            <span class="text--small badge font-weight-normal badge--warning">@lang('PENDING')</span>
                                         @endif
                                     </td>
                                     <td data-label="@lang('Action')">
@@ -96,7 +102,8 @@
                             <select name="driver_id" class="select2-basic" required>
                                 <option value="">@lang('Select an option')</option>
                                 @foreach ($drivers as $item)
-                                    <option value="{{ $item->id }}" data-name="{{ $item->firstname.' ' . $item->lastname }}">{{ $item->firstname .' ' . $item->lastname }}</option>
+                                    <option value="{{ $item->id }}"
+                                            data-name="{{ $item->firstname.' ' . $item->lastname }}">{{ $item->firstname .' ' . $item->lastname }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -109,7 +116,6 @@
             </div>
         </div>
     </div>
-
 
 @endsection
 @push('breadcrumb-plugins')
@@ -148,14 +154,14 @@
             $('.editBtn').on('click', function () {
                 var modal = $('#editModal');
                 var trip = $(this).data('trip');
-                modal.find('form').attr('action' ,$(this).data('action'));
+                modal.find('form').attr('action', $(this).data('action'));
                 console.log(trip);
 
                 // Find the select element
                 var selectElement = modal.find('select[name=driver_id]');
 
                 // Loop through the options and set the selected option
-                selectElement.find('option').each(function() {
+                selectElement.find('option').each(function () {
                     if ($(this).data('name') === trip.firstname + ' ' + trip.lastname) {
                         $(this).prop('selected', true);
                     }
@@ -164,8 +170,6 @@
                 $('.select2-basic').select2();
                 modal.modal('show');
             });
-
-
 
 
         })(jQuery);

@@ -348,12 +348,9 @@
   "Payment_Request_Has_Been_Approved": "Payment agent  amount has been approved.",
   "Payment_Request_Has_Been_Rejected": "Payment agent amount has been rejected.",
   "first_residence_card_image": "first residence card image",
-  "first_residence_card_image": "first residence card image",
   "last_residence_card_image": "last_residence_card_image",
-  "first_residence_card_image": "first residence card image",
   "first_license_image": "first license image",
   "last_license_image": "last license image",
-  "last_residence_card_image": "second residence card image",
   "All_Drivers": "All Drivers",
   "Password_Confirmation": "Password Confirmation",
   "Driver": "Driver",
@@ -361,7 +358,6 @@
   "first_id_card_image": "first id card image",
   "last_id_card_image": "last id card image",
   "Agent_Payment_History": "Agent Payment History",
-  "you_dont_have_enough_money": "you don't have enough money",
   "All Users": "All Users",
   "Debt_balance": "debt balance",
   "Money": "money",
@@ -820,6 +816,12 @@
   "trips": "trips",
   "all_trips_monthly": "all trips monthly",
   "assign_driver_successfully":"assign driver successfully",
-  "status_changed_successfully": "status changed successfully"
+  "status_changed_successfully": "status changed successfully",
+  "DRIVER_ACCEPT": "DRIVER ACCEPT",
+  "PENDING": "PENDING",
+  "DRIVER_CANCEL": "DRIVER_CANCEL",
+  "SUCCESS": "SUCCESS",
+  "IN_PROGRESS":"IN_PROGRESS",
+  "TRANSFER": "TRANSFER"
 
 }

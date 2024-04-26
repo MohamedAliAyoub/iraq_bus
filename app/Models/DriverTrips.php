@@ -14,6 +14,7 @@ class DriverTrips extends Model
     const DRIVER_CANCEL = 2;
     const SUCCESS = 3;
     const IN_PROGRESS = 4;
+    const  TRANSFER = 5;
 
     protected $guarded = ['id'];
     protected $appends = ['total_seats'];

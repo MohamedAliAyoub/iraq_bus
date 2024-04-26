@@ -114,8 +114,46 @@ class TripController extends Controller
             return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Cannot transfer trip as less than 12 hours remaining'])->setStatusCode(400);
         }
         TODO: //send notifiaction to dashboard
+        $trip->update(['status' => 5]);
+        return response()->json(['status' => 'success', 'data' => [], 'message' => __('status_changed_successfully')])->setStatusCode(200);
+    }
+
+
+    /**
+     *
+     * All transfer Trip
+     * @return void
+     */
+    public function deadLine(Request $request)
+    {
+        $currentTime = time();
+        $trip = DriverTrips::where('driver_id', auth()->id())
+            ->orderBy('date', 'asc')
+            ->where([['status', 0 ] , ['data' , ]])
+            ->whereHas('trip.schedule', function ($query) {
+                $query->whereNotNull('start_from');
+            })
+            ->with(['trip' => function ($query) {
+                $query->orderBy('start_from', 'asc')->take(1);
+            }])
+            ->first();
+//        dd($trip);
+        if (!$trip) {
+            return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Trip not found'])->setStatusCode(404);
+        }
+        $tripDateTime = strtotime($trip->date . ' ' . $trip->trip->schedule->start_from);
+        $timeDifference = abs($currentTime - $tripDateTime);
+
+
+        $hoursDifference = floor($timeDifference / 3600);
+
+        if ($hoursDifference < 12) {
+            return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Cannot transfer trip as less than 12 hours remaining'])->setStatusCode(400);
+        }
+        TODO: //send notifiaction to dashboard
         $trip->update(['status' => 2]);
         return response()->json(['status' => 'success', 'data' => [], 'message' => __('status_changed_successfully')])->setStatusCode(200);
     }
+
 }
 

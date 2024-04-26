@@ -13,6 +13,9 @@
   "DRIVER_ACCEPT": "تم الموافقة من السائق",
   "PENDING": "معلق",
   "DRIVER_CANCEL": "تم الرفض",
+  "SUCCESS": "تمت الرحلة بنجاح",
+  "IN_PROGRESS":"في الطريق",
+  "TRANSFER": "تم تحويل الرحلة",
   "assign_driver_successfully":"تم اضافة السائق بنجاح",
   "status_changed_successfully": "تم تغيير الحالة بنجاح"
 

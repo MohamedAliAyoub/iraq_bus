@@ -130,6 +130,7 @@ Route::namespace('Api\Driver')->name('driver.')->prefix('v1/driver')->group(func
             Route::get('/','TripController@getTrips');
             Route::get('/all','TripController@getAlltrips');//without details
             Route::get('/dates','TripController@dates');//without details
+            Route::get('/dead-line','TripController@deadLine');//without details
             Route::get('show/{trip}','TripController@show');
             Route::post('update-status','TripController@updateStatus');
             Route::post('start','TripController@startTrip');
