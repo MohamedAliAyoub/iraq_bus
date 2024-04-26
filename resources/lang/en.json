@@ -819,6 +819,7 @@
   "manage_drivers": "manage drivers",
   "trips": "trips",
   "all_trips_monthly": "all trips monthly",
-  "assign_driver_successfully":"assign driver successfully"
+  "assign_driver_successfully":"assign driver successfully",
+  "status_changed_successfully": "status changed successfully"
 
 }
