@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Driver;
 
+use App\Http\Resources\Api\Driver\DriverTripsDatesResource;
 use App\Models\DriverTrips;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -36,6 +37,17 @@ class TripController extends Controller
             $trips = $query->paginate(getPaginate());
         }
         return response()->json(['status' => 'success', 'data' => TripResource::collection($trips)->response()->getData(), 'message' => ''])->setStatusCode(200);
+    }
+
+    /**
+     *
+     * All Driver Trips Dates
+     * @return DriverTripsDatesResource
+     */
+    public function dates()
+    {
+        $query = DriverTrips::query()->with('trip')->where('driver_id', auth()->id())->paginate(getPaginate());
+        return response()->json(['status' => 'success', 'data' => DriverTripsDatesResource::collection($query)->response()->getData(), 'message' => ''])->setStatusCode(200);
     }
 
     /**
@@ -87,20 +99,23 @@ class TripController extends Controller
      */
     public function transferTrip(Request $request)
     {
-        $user = auth()->user();
-        $now = Carbon::now();
-        $trip = Trip::where(['fleet_type_id' => $user->fleet_type_id,
-            'vehicle_route_id' => $user->route_id, 'status' => 1, 'id' => $request->trip_id])
-            ->first();
+        $currentTime = time();
+        $trip = DriverTrips::query()->findOrFail($request->id)->with('trip')->first();
         if (!$trip) {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Trip not found'])->setStatusCode(404);
         }
-        $startFrom = Carbon::createFromFormat('H:i:s', $trip->schedule->start_from);
-        if ($now->diffInHours($startFrom) < 12) {
+        $tripDateTime = strtotime($trip->date . ' ' . $trip->trip->schedule->start_from);
+        $timeDifference = abs($currentTime - $tripDateTime);
+
+
+        $hoursDifference = floor($timeDifference / 3600);
+
+        if ($hoursDifference < 12) {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Cannot transfer trip as less than 12 hours remaining'])->setStatusCode(400);
         }
         TODO: //send notifiaction to dashboard
-        return response()->json(['status' => 'success', 'data' => [], 'message' => 'the trip request to transfer'])->setStatusCode(200);
+        $trip->update(['status' => 2]);
+        return response()->json(['status' => 'success', 'data' => [], 'message' => __('status_changed_successfully')])->setStatusCode(200);
     }
 }
 
