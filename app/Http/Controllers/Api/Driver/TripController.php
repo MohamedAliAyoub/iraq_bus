@@ -56,7 +56,9 @@ class TripController extends Controller
 
     public function show(Trip $trip)
     {
-        $trips = Trip::with(['bookedTickets','bookedTickets.user'])->paginate(getPaginate());
+        $trips = DriverTrips::with(['trip' => function($q){
+            $q->with(['bookedTickets','bookedTickets.user']);
+        }])->paginate(getPaginate());
         return response()->json(['status' => 'success','data'=> TripResource::collection($trips)->response()->getData() ,'message'=>''])->setStatusCode(200);
     }
 
