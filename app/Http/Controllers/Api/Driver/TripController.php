@@ -74,12 +74,10 @@ class TripController extends Controller
      */
     public function startTrip(Request $request)
     {
-        $user = auth()->user();
-        $trip = Trip::where(['fleet_type_id' => $user->fleet_type_id,
-            'vehicle_route_id' => $user->vehicle_route_id, 'status' => 1, 'id' => $request->trip_id])
-            ->first();
+        DriverTrips::query()->findOrFail($request->id)->update(['status' => 4]);
         TODO: //change the status of trip then send notifacations , sms , whatsapp to users
-        return response()->json(['status' => 'success', 'data' => [], 'message' => 'the trip start'])->setStatusCode(200);
+        return response()->json(['status' => 'success', 'data' => [], 'message' => __('status_changed_successfully')])->setStatusCode(200);
+
     }
 
     /**
