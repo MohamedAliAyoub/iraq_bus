@@ -14,6 +14,10 @@ class Trip extends Model
         'day_off' => 'array'
     ];
 
+    public function driverTrips(){
+        return $this->hasMany(DriverTrips::class , 'trip_id');
+    }
+
     public function fleetType(){
         return $this->belongsTo(FleetType::class);
     }

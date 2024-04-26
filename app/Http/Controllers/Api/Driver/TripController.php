@@ -27,11 +27,7 @@ class TripController extends Controller
     {
       $user = auth()->user();
 
-        $query = Trip::where([
-            'fleet_type_id' => $user->fleet_type_id,
-            'vehicle_route_id' => $user->route_id,
-            'status' => 1
-        ]);
+        $query = Trip::whereHas('driverTrips');
 
         if ($request->has('bookedTickets')) {
             $trips = $query->with(['bookedTickets', 'bookedTickets.user'])->paginate(getPaginate());
