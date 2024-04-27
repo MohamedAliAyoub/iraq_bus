@@ -17,7 +17,9 @@
   "IN_PROGRESS":"في الطريق",
   "TRANSFER": "تم تحويل الرحلة",
   "assign_driver_successfully":"تم اضافة السائق بنجاح",
-  "status_changed_successfully": "تم تغيير الحالة بنجاح"
+  "status_changed_successfully": "تم تغيير الحالة بنجاح",
+  "dead_line" : "الوقت المتبقي للرحلة القادمة"
+
 
 
 

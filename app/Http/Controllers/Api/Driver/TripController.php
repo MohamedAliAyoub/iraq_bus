@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Driver\TripResource;
 use Carbon\Carbon;
 use App\Models\Trip;
+use Illuminate\Support\Facades\DB;
 
 
 class TripController extends Controller
@@ -120,39 +121,46 @@ class TripController extends Controller
 
 
     /**
+     * Retrieve the nearest transfer trip and calculate the remaining time until its deadline.
      *
-     * All transfer Trip
-     * @return void
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function deadLine(Request $request)
     {
         $currentTime = time();
+        $todayDate = date('Y-m-d');
+
         $trip = DriverTrips::where('driver_id', auth()->id())
-            ->orderBy('date', 'asc')
-            ->where([['status', 0 ] , ['data' , ]])
-            ->whereHas('trip.schedule', function ($query) {
-                $query->whereNotNull('start_from');
+            ->where('date', '>=', $todayDate)
+            ->join('trips', 'driver_trips.trip_id', '=', 'trips.id')
+            ->join('schedules', 'trips.schedule_id', '=', 'schedules.id')
+            ->with(['trip', 'trip.schedule'])
+            ->when($todayDate != date('Y-m-d'), function ($query) use ($currentTime) {
+                $query->whereHas('trip.schedule', function ($query) use ($currentTime) {
+                    $query->where('start_from', '>=', $currentTime);
+                });
             })
-            ->with(['trip' => function ($query) {
-                $query->orderBy('start_from', 'asc')->take(1);
-            }])
+            ->orderBy(DB::raw("TIMEDIFF(schedules.start_from, '$currentTime')") , 'asc')
             ->first();
-//        dd($trip);
+
         if (!$trip) {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Trip not found'])->setStatusCode(404);
         }
         $tripDateTime = strtotime($trip->date . ' ' . $trip->trip->schedule->start_from);
         $timeDifference = abs($currentTime - $tripDateTime);
 
-
         $hoursDifference = floor($timeDifference / 3600);
+        $minutesDifference = floor(($timeDifference % 3600) / 60);
 
-        if ($hoursDifference < 12) {
-            return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Cannot transfer trip as less than 12 hours remaining'])->setStatusCode(400);
-        }
-        TODO: //send notifiaction to dashboard
-        $trip->update(['status' => 2]);
-        return response()->json(['status' => 'success', 'data' => [], 'message' => __('status_changed_successfully')])->setStatusCode(200);
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'hours'=>$hoursDifference ,
+                'minutes' =>$minutesDifference
+            ],
+            'message' => __('dead_line')])
+            ->setStatusCode(200);
     }
 
 }

@@ -822,6 +822,7 @@
   "DRIVER_CANCEL": "DRIVER_CANCEL",
   "SUCCESS": "SUCCESS",
   "IN_PROGRESS":"IN_PROGRESS",
-  "TRANSFER": "TRANSFER"
+  "TRANSFER": "TRANSFER",
+  "dead_line" : "dead line for next trip"
 
 }
