@@ -47,7 +47,7 @@ class TripController extends Controller
      */
     public function dates()
     {
-        $query = DriverTrips::query()->with('trip')->where('driver_id', auth()->id())->paginate(getPaginate());
+        $query = DriverTrips::query()->with('trip')->where('driver_id', auth()->id())->groupBy('date')->paginate(getPaginate());
         return response()->json(['status' => 'success', 'data' => DriverTripsDatesResource::collection($query)->response()->getData(), 'message' => ''])->setStatusCode(200);
     }
 
