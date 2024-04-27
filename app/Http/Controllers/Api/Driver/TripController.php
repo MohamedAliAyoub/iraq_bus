@@ -28,7 +28,7 @@ class TripController extends Controller
     {
         $user = auth()->user();
 
-        $query = DriverTrips::query()->with('trip')->where('driver_id', $user->id);
+        $query = DriverTrips::query()->filterByDate($request->date)->with('trip')->where('driver_id', $user->id);
 
         if ($request->has('bookedTickets')) {
             $trips = $query->with(['trip' => function ($q) {

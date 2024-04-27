@@ -35,4 +35,21 @@ class DriverTrips extends Model
         return $this->trip->fleetType->total_seats;
     }
 
+    /**
+     * Scope a query to filter by date if the date parameter is set.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|null $date
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFilterByDate($query, $date = null)
+    {
+        if ($date) {
+            return $query->where('date', $date);
+        }
+
+        return $query;
+    }
 }
+
+
