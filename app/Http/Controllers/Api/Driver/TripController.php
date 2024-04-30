@@ -172,7 +172,7 @@ class TripController extends Controller
             return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Cannot transfer trip as less than 12 hours remaining'])->setStatusCode(400);
         }
         TODO: //send notifiaction to dashboard
-        $trip->update(['status' => 5]);
+        $trip->update(['status' => 5 , 'driver_id' => null]);
         return response()->json(['status' => 'success', 'data' => [], 'message' => __('status_changed_successfully')])->setStatusCode(200);
     }
 
