@@ -60,6 +60,7 @@ class TripController extends Controller
      */
     public function history(): \Illuminate\Http\JsonResponse
     {
+        dd(auth()->id());
         $query = DriverTrips::query()
             ->with('trip')
             ->where(
@@ -99,7 +100,7 @@ class TripController extends Controller
         return response()->json(['status' => 'success', 'data' => TripResource::collection($trips)->response()->getData(), 'message' => ''])->setStatusCode(200);
     }
 
-    private function getDriverPrice($trip)
+    private function getDriverPrice($trip): float
     {
         $totalPrice = $trip->trip->bookedTickets
             ->filter(function ($q) use ($trip) {
@@ -110,7 +111,6 @@ class TripController extends Controller
                     && $q->trip->end_to == $end_to;
             })
             ->sum('sub_total');
-
         // Calculate 90% of the total price
         $driverPrice = $totalPrice * 0.9;
 
