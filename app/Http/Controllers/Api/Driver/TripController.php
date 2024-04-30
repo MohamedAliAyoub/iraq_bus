@@ -60,7 +60,7 @@ class TripController extends Controller
      */
     public function history(): \Illuminate\Http\JsonResponse
     {
-        dd(auth()->id());
+
         $query = DriverTrips::query()
             ->with('trip')
             ->where(
