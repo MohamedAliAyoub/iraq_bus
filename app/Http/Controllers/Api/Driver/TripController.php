@@ -101,7 +101,7 @@ class TripController extends Controller
 
     private function getDriverPrice($trip)
     {
-        return $trip->trip->bookedTickets
+        $totalPrice = $trip->trip->bookedTickets
             ->filter(function ($q) use ($trip) {
                 $start_from = intval($q->source_destination[0]);
                 $end_to = intval($q->source_destination[1]);
@@ -110,6 +110,11 @@ class TripController extends Controller
                     && $q->trip->end_to == $end_to;
             })
             ->sum('sub_total');
+
+        // Calculate 90% of the total price
+        $driverPrice = $totalPrice * 0.9;
+
+        return $driverPrice;
     }
 
 
