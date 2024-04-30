@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Driver;
 
+use App\Http\Controllers\Gateway\PaypalSdk\PayPalHttp\Serializer\Json;
+use App\Http\Resources\Api\Driver\DriverHistoryResource;
 use App\Http\Resources\Api\Driver\DriverTripsDatesResource;
 use App\Models\DriverTrips;
 use Illuminate\Http\Request;
@@ -53,8 +55,32 @@ class TripController extends Controller
 
     /**
      *
+     *  Driver Trips that have status accept and have price not null
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function history(): \Illuminate\Http\JsonResponse
+    {
+        $query = DriverTrips::query()
+            ->with('trip')
+            ->where(
+                [
+                    ['driver_id', auth()->id()],
+                    ['status', 3], // success
+                ])
+            ->whereNotNull('price')
+            ->paginate(getPaginate());
+        return response()->json(
+            [
+                'status' => 'success',
+                'data' => DriverHistoryResource::collection($query)->response()->getData(),
+                'message' => ''
+            ])->setStatusCode(200);
+    }
+
+    /**
+     *
      * All Trips
-     * @return TripResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getAllTrips()
     {
@@ -73,17 +99,43 @@ class TripController extends Controller
         return response()->json(['status' => 'success', 'data' => TripResource::collection($trips)->response()->getData(), 'message' => ''])->setStatusCode(200);
     }
 
+    private function getDriverPrice($trip)
+    {
+        return $trip->trip->bookedTickets
+            ->filter(function ($q) use ($trip) {
+                $start_from = intval($q->source_destination[0]);
+                $end_to = intval($q->source_destination[1]);
+                return $q->date_of_journey == $trip->date
+                    && $q->trip->start_from == $start_from
+                    && $q->trip->end_to == $end_to;
+            })
+            ->sum('sub_total');
+    }
+
+
     public function updateStatus(DriverTrips $driverTrip, Request $request)
     {
-        DriverTrips::query()->findOrFail($request->id)->update(['status' => $request->status]);
-        return response()->json(['status' => 'success', 'data' => [], 'message' => __('status_changed_successfully')])->setStatusCode(200);
+        $trip = DriverTrips::findOrFail($request->id);
 
+        // Update the status
+        $trip->update(['status' => $request->status]);
+
+        // Check if the status is changed to 3 and the price is null
+        if ($trip->status == 3 && $trip->price == null) {
+            $trip->update(['price' => $this->getDriverPrice($trip)]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [],
+            'message' => __('status_changed_successfully')
+        ])->setStatusCode(200);
     }
 
     /**
      *
      * All start Trip
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function startTrip(Request $request)
     {
@@ -96,7 +148,7 @@ class TripController extends Controller
     /**
      *
      * All transfer Trip
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function transferTrip(Request $request)
     {
@@ -123,7 +175,7 @@ class TripController extends Controller
     /**
      * Retrieve the nearest transfer trip and calculate the remaining time until its deadline.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function deadLine(Request $request)
@@ -141,7 +193,7 @@ class TripController extends Controller
                     $query->where('start_from', '>=', $currentTime);
                 });
             })
-            ->orderBy(DB::raw("TIMEDIFF(schedules.start_from, '$currentTime')") , 'asc')
+            ->orderBy(DB::raw("TIMEDIFF(schedules.start_from, '$currentTime')"), 'asc')
             ->first();
 
         if (!$trip) {
@@ -156,8 +208,8 @@ class TripController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => [
-                'hours'=>$hoursDifference ,
-                'minutes' =>$minutesDifference
+                'hours' => $hoursDifference,
+                'minutes' => $minutesDifference
             ],
             'message' => __('dead_line')])
             ->setStatusCode(200);

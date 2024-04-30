@@ -145,7 +145,7 @@ class BookingController extends Controller
     /**
      * Book direct booking
      * @param BookDirectBookingRequest $request
-     * @return BookDirectBookingResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function bookDirectBooking(BookDirectBookingRequest $request)
     {
@@ -298,14 +298,13 @@ class BookingController extends Controller
 
 
         return response()->json(['status' => 'success', 'data' => TicketDirectBookingResource::make($bookedTicket), 'message' => trans('messages.data_found')])->setStatusCode(200);
-
     }
 
 
     /**
      * Book special booking
      * @param BookSpecialBookingRequest $request
-     * @return TicketSpecialBookingResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function bookSpecialBooking(BookSpecialBookingRequest $request)
     {
