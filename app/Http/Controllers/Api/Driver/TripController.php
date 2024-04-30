@@ -24,7 +24,7 @@ class TripController extends Controller
     /**
      *
      * All Trips
-     * @return TripResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getTrips(Request $request)
     {
@@ -45,7 +45,7 @@ class TripController extends Controller
     /**
      *
      * All Driver Trips Dates
-     * @return DriverTripsDatesResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function dates()
     {
