@@ -147,6 +147,7 @@ class MangeDriverController extends Controller
     public function update(Request $request, $id)
     {
 
+
         $user = User::findOrFail($id);
 
         $countryData = json_decode(file_get_contents(resource_path('views/partials/country.json')));
@@ -164,18 +165,15 @@ class MangeDriverController extends Controller
                 'nullable',
                 'file',
                 'mimes:pdf',
-                Rule::requiredIf(isset($request->status)),
             ],
             'image' => [
                 'nullable',
                 'image',
-                Rule::requiredIf(isset($request->status)),
             ],
             'record' => [
                 'nullable',
                 'file',
                 'mimes:mp3',
-                Rule::requiredIf(isset($request->status)),
             ],
         ]);
 
@@ -200,19 +198,36 @@ class MangeDriverController extends Controller
 
         $path = imagePath()['driver']['path'];
 
-        if ($request->status == 1) {
-
+        if ($request->image) {
             try {
                 $image_path = uploadImage($request->image, imagePath()['driver']['path'], imagePath()['driver']['size'], $user->driverDetails->image);
-                $pdf_path = uploadFile($request->pdf, $path, imagePath()['driver']['size'], $user->driverDetails->pdf);
-                $record_path = uploadFile($request->record, $path, imagePath()['driver']['size'], $user->driverDetails->record);
                 DriverDetails::query()->where('user_id', $user->id)->update([
-                    'pdf' => $record_path,
-                    'record' => $pdf_path,
                     'image' => $image_path
                 ]);
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Image could not be uploaded.'];
+                return back()->withNotify($notify);
+            }
+        }
+        if ($request->pdf) {
+            try {
+                $pdf_path = uploadFile($request->pdf, $path, imagePath()['driver']['size'], $user->driverDetails->pdf);
+                DriverDetails::query()->where('user_id', $user->id)->update([
+                    'pdf' => $pdf_path,
+                ]);
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'PDF could not be uploaded.'];
+                return back()->withNotify($notify);
+            }
+        }
+        if ($request->record) {
+            try {
+                $record_path = uploadFile($request->record, $path, imagePath()['driver']['size'], $user->driverDetails->record);
+                DriverDetails::query()->where('user_id', $user->id)->update([
+                    'record' => $pdf_path,
+                ]);
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'Recrd could not be uploaded.'];
                 return back()->withNotify($notify);
             }
         }
