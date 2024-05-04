@@ -64,7 +64,7 @@ class AuthController extends Controller
         $user->fleet_type_id = $request->fleet_type_id;
         $user->route_id = $request->route_id;
         $user->address = [
-            'address' => $request->address,
+            'address' => $request->address['address'],
             'city' => $request->city,
             'state' => $request->state,
             'zip' => $request->zip,

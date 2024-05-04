@@ -19,7 +19,7 @@ class FleetType extends Model
     }
     public function getTotalSeatsAttribute()
     {
-        return array_sum($this->deck_seats);
+        return array_sum($this->deck_seats?? []) ;
     }
     public function vehicles(){
         return $this->hasMany(Vehicle::class);
