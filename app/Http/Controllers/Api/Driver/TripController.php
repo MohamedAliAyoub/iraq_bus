@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Api\Driver;
 
 use App\Http\Controllers\Gateway\PaypalSdk\PayPalHttp\Serializer\Json;
+use App\Http\Requests\Api\Driver\Settings\ChangePasswordRequest;
 use App\Http\Resources\Api\Driver\DriverHistoryResource;
 use App\Http\Resources\Api\Driver\DriverTripsDatesResource;
 use App\Models\DriverFinancial;
 use App\Models\DriverMoney;
 use App\Models\DriverTrips;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Driver\TripResource;
 use Carbon\Carbon;
 use App\Models\Trip;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 
 class TripController extends Controller
@@ -61,7 +64,7 @@ class TripController extends Controller
     /**
      *
      *  Driver Trips that have status accept and have price not null
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function history(): \Illuminate\Http\JsonResponse
     {
@@ -86,7 +89,7 @@ class TripController extends Controller
     /**
      *
      * All Trips
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getAllTrips()
     {
@@ -167,7 +170,7 @@ class TripController extends Controller
     /**
      *
      * All start Trip
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function startTrip(Request $request)
     {
@@ -180,7 +183,7 @@ class TripController extends Controller
     /**
      *
      * All transfer Trip
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function transferTrip(Request $request)
     {
@@ -207,8 +210,8 @@ class TripController extends Controller
     /**
      * Retrieve the nearest transfer trip and calculate the remaining time until its deadline.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
     public function deadLine(Request $request)
     {
@@ -246,6 +249,7 @@ class TripController extends Controller
             'message' => __('dead_line')])
             ->setStatusCode(200);
     }
+
 
 }
 

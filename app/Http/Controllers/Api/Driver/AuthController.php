@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api\Driver;
 
-use App\Http\Requests\Driver\DriverStoreRequest;
 use App\Models\DriverCarImage;
 use App\Models\DriverDetails;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\Api\Driver\Auth\{RegisterRequest,
     ResendCodeRequest,
     SendCodeRequest,
@@ -37,7 +36,7 @@ class AuthController extends Controller
      * register for driver only
      *
      * @param RegisterRequest $request
-     * @return void
+     * @return JsonResponse
      */
     public function register(RegisterRequest $request)
     {
@@ -145,7 +144,7 @@ class AuthController extends Controller
      * login
      *
      * @param LoginRequest $request
-     * @return void
+     * @return JsonResponse
      */
     public function login(LoginRequest $request)
     {
@@ -177,7 +176,7 @@ class AuthController extends Controller
      * forget Password
      *
      * @param ForgetPasswordRequest $request
-     * @return void
+     * @return JsonResponse
      */
     public function forgetPassword(ForgetPasswordRequest $request)
     {
@@ -195,7 +194,7 @@ class AuthController extends Controller
      * resendCode
      *
      * @param ResendCodeRequest $request
-     * @return void
+     * @return JsonResponse
      */
     public function resendCode(ResendCodeRequest $request)
     {
@@ -213,7 +212,7 @@ class AuthController extends Controller
      * Verify
      *
      * @param VerifyRequest $request
-     * @return void
+     * @return JsonResponse
      */
     public function verify(VerifyRequest $request)
     {
@@ -229,7 +228,7 @@ class AuthController extends Controller
      * Undocumented function
      *
      * @param ResetPasswordRequest $request
-     * @return void
+     * @return JsonResponse
      */
     public function resetPassword(ResetPasswordRequest $request)
     {
@@ -242,7 +241,7 @@ class AuthController extends Controller
      * Undocumented function
      *
      * @param LogoutRequest $request
-     * @return void
+     * @return JsonResponse
      */
     public function logout(LogoutRequest $request)
     {
@@ -257,7 +256,7 @@ class AuthController extends Controller
      * Undocumented function
      *
      * @param ProfileRequest $request
-     * @return void
+     * @return JsonResponse
      */
     public function profile(ProfileRequest $request)
     {
@@ -270,9 +269,9 @@ class AuthController extends Controller
      * changePassword
      *
      * @param ChangePasswordRequest $request
-     * @return void
+     * @return JsonResponse
      */
-    public function changePassword(ChangePasswordRequest $request)
+    public function changePass(ChangePasswordRequest $request): JsonResponse
     {
         $user = auth()->user();
         if (Hash::check($request->old_password, $user->password)) {

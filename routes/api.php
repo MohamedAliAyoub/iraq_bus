@@ -119,8 +119,11 @@ Route::namespace('Api\Driver')->name('driver.')->prefix('v1/driver')->group(func
 	Route::post('login','AuthController@login');
 
 
-	Route::middleware('auth.api:sanctum')->group(function(){
-		Route::get('banners','GeneralController@banners');
+
+    Route::middleware('auth.api:sanctum')->group(function(){
+        Route::post('change-password', "AuthController@changePass");
+
+        Route::get('banners','GeneralController@banners');
 		
 		Route::prefix('settings')->group(function(){
 			Route::post('change-password','AuthController@changePassword');
@@ -137,7 +140,7 @@ Route::namespace('Api\Driver')->name('driver.')->prefix('v1/driver')->group(func
             Route::post('start','TripController@startTrip');
             Route::post('transfer','TripController@transferTrip');
             Route::get('finance-data','TripController@getDriverFinance');
-		});
+        });
 
 		Route::prefix('pocket')->group(function(){
 			Route::get('get-amount','PocketController@getAmount');
