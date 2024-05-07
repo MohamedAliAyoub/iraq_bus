@@ -20,6 +20,7 @@ class DriverTrips extends Model
     protected $appends = ['total_seats'];
 
 
+
     public function trip(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Trip::class);
@@ -50,6 +51,8 @@ class DriverTrips extends Model
 
         return $query;
     }
+
+
 }
 
 

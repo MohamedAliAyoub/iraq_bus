@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Driver;
 use App\Http\Controllers\Gateway\PaypalSdk\PayPalHttp\Serializer\Json;
 use App\Http\Resources\Api\Driver\DriverHistoryResource;
 use App\Http\Resources\Api\Driver\DriverTripsDatesResource;
+use App\Models\DriverFinancial;
+use App\Models\DriverMoney;
 use App\Models\DriverTrips;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -121,6 +123,20 @@ class TripController extends Controller
     }
 
 
+    public function getDriverFinance()
+    {
+        $item = DriverFinancial::query()->where(['driver_id' => auth()->id()])->first();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'suspended_balance' => $item->suspended_balance ?? 0,
+                'current_balance' => $item->current_balance ?? 0
+            ],
+            'message' => __('success')
+        ])->setStatusCode(200);
+    }
+
     public function updateStatus(DriverTrips $driverTrip, Request $request)
     {
         $trip = DriverTrips::findOrFail($request->id);
@@ -131,6 +147,14 @@ class TripController extends Controller
         // Check if the status is changed to 3 and the price is null
         if ($trip->status == 3 && $trip->price == null) {
             $trip->update(['price' => $this->getDriverPrice($trip)]);
+            DriverFinancial::query()->updateOrCreate([
+                'driver_id' => auth()->id(),
+            ], ['suspended_balance' => DB::raw('suspended_balance + ' . $trip->price)]);
+            DriverMoney::query()->create([
+                'driver_id' => auth()->id(),
+                'driver_trip_id' => $trip->id,
+                'price' => $trip->price,
+            ]);
         }
 
         return response()->json([
@@ -175,7 +199,7 @@ class TripController extends Controller
             return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Cannot transfer trip as less than 12 hours remaining'])->setStatusCode(400);
         }
         TODO: //send notifiaction to dashboard
-        $trip->update(['status' => 5 , 'driver_id' => null]);
+        $trip->update(['status' => 5, 'driver_id' => null]);
         return response()->json(['status' => 'success', 'data' => [], 'message' => __('status_changed_successfully')])->setStatusCode(200);
     }
 
