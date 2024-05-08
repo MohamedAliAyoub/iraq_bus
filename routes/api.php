@@ -140,6 +140,8 @@ Route::namespace('Api\Driver')->name('driver.')->prefix('v1/driver')->group(func
             Route::post('start','TripController@startTrip');
             Route::post('transfer','TripController@transferTrip');
             Route::get('finance-data','TripController@getDriverFinance');
+            Route::post('edit-driver-trip','TripController@editDriverTripHistory');
+
         });
 
 		Route::prefix('pocket')->group(function(){

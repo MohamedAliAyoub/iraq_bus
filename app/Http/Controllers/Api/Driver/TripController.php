@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api\Driver;
 
-use App\Http\Controllers\Gateway\PaypalSdk\PayPalHttp\Serializer\Json;
-use App\Http\Requests\Api\Driver\Settings\ChangePasswordRequest;
+use App\Http\Requests\Api\Driver\Trip\EidtDriverTripRequest;
 use App\Http\Resources\Api\Driver\DriverHistoryResource;
 use App\Http\Resources\Api\Driver\DriverTripsDatesResource;
+use App\Http\Resources\Api\Driver\EditDriverTripResource;
 use App\Models\DriverFinancial;
 use App\Models\DriverMoney;
 use App\Models\DriverTrips;
+use App\Models\EditTripHistory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,7 +17,6 @@ use App\Http\Resources\Api\Driver\TripResource;
 use Carbon\Carbon;
 use App\Models\Trip;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 
 class TripController extends Controller
@@ -194,11 +194,10 @@ class TripController extends Controller
             return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Trip not found'])->setStatusCode(404);
         }
         $tripDateTime = strtotime($trip->date . ' ' . $trip->trip->schedule->start_from);
-        $timeDifference = $tripDateTime - $currentTime  ;
+        $timeDifference = $tripDateTime - $currentTime;
 
 
         $hoursDifference = floor($timeDifference / 3600);
-
 
 
         if ($hoursDifference < 12) {
@@ -253,6 +252,30 @@ class TripController extends Controller
             ->setStatusCode(200);
     }
 
+
+    /**
+     * Eit driver trip schedule or day_off or route.
+     *
+     * @param EidtDriverTripRequest $request
+     * @return JsonResponse
+     */
+    public function editDriverTripHistory(EidtDriverTripRequest $request): JsonResponse
+    {
+        $item = EditTripHistory::query()->create([
+            "driver_id" => $request->driver_id,
+            "route_id" => $request->route_id,
+            "schedule_id" => $request->schedule_id,
+            "day_off" => $request->day_off,
+        ]);
+        $createdItem = EditTripHistory::findOrFail($item->id);
+
+
+        return response()->json([
+            'status' => 'success',
+            'data' => EditDriverTripResource::make($createdItem),
+            'message' => __('success')])
+            ->setStatusCode(200);
+    }
 
 }
 
