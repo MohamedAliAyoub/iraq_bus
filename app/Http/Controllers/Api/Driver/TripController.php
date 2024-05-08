@@ -188,15 +188,18 @@ class TripController extends Controller
     public function transferTrip(Request $request)
     {
         $currentTime = time();
-        $trip = DriverTrips::query()->findOrFail($request->id)->with('trip')->first();
+        $trip = DriverTrips::query()->findOrFail(intval($request->id));
+
         if (!$trip) {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Trip not found'])->setStatusCode(404);
         }
         $tripDateTime = strtotime($trip->date . ' ' . $trip->trip->schedule->start_from);
-        $timeDifference = abs($currentTime - $tripDateTime);
+        $timeDifference = $tripDateTime - $currentTime  ;
 
 
         $hoursDifference = floor($timeDifference / 3600);
+
+
 
         if ($hoursDifference < 12) {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Cannot transfer trip as less than 12 hours remaining'])->setStatusCode(400);
