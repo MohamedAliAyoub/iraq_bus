@@ -238,7 +238,7 @@ class TripController extends Controller
             ->first();
 
         if (!$trip) {
-            return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Trip not found'])->setStatusCode(404);
+            return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Trip not found'])->setStatusCode(200);
         }
         $tripDateTime = strtotime($trip->date . ' ' . $trip->trip->schedule->start_from);
         $timeDifference = abs($currentTime - $tripDateTime);
