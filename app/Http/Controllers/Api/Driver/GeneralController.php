@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Driver;
 
+use App\Http\Resources\Api\Driver\ScheduleResource;
 use App\Models\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class GeneralController extends Controller
 {
     public function __construct()
     {
-      $this->middleware('check.user:3')->except(['countries','fleetTypes','routes']);
+      $this->middleware('check.user:3')->except(['countries','fleetTypes','routes' , 'schedules']);
     }
 
     /**
@@ -70,13 +71,13 @@ class GeneralController extends Controller
 
     /**
      *
-     * All routes
+     * All schedules
      * @return JsonResponse
      */
-    public function schedules(): JsonResponse
+    public function schedules()
     {
-        $schedules = Schedule::active()->select(['id','name'])->get();
-        return response()->json(['status' => 'success','data'=> $schedules ,'message'=>''])->setStatusCode(200);
+        $schedules = Schedule::active()->get();
+        return response()->json(['status' => 'success','data'=> ScheduleResource::collection($schedules) ,'message'=>''])->setStatusCode(200);
     }
 
 }
