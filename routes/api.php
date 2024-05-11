@@ -108,8 +108,9 @@ Route::namespace('Api\Driver')->name('driver.')->prefix('v1/driver')->group(func
 	//general
 	Route::get('countries','GeneralController@countries');
 	Route::get('fleet-types','GeneralController@fleetTypes');
-	Route::get('routes','GeneralController@routes');
-	
+    Route::get('routes','GeneralController@routes');
+    Route::get('schedules','GeneralController@schedules');
+
 	//Auth Routes
 	Route::post('register', 'AuthController@register');
 	Route::post('forget-password','AuthController@forgetPassword');

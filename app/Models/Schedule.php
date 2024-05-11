@@ -9,4 +9,9 @@ class Schedule extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    //scope
+    public function scopeActive(){
+        return  $this->where('status', 1);
+    }
 }

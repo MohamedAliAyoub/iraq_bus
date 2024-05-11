@@ -71,6 +71,7 @@ class User extends Authenticatable
         return $this->firstname . ' ' . $this->lastname;
     }
 
+
     public function scopeActive()
     {
         return $this->where('status', 1);

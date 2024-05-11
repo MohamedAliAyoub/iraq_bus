@@ -823,6 +823,9 @@
   "SUCCESS": "SUCCESS",
   "IN_PROGRESS":"IN_PROGRESS",
   "TRANSFER": "TRANSFER",
-  "dead_line" : "dead line for next trip"
+  "dead_line" : "dead line for next trip",
+  "all_driver_change_trip" : "all driver change trip pending",
+  "accept" : "accept",
+  "Are_you_sure_to_active_driver_request" : "Are you sure to active",
 
 }

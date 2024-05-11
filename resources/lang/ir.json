@@ -18,12 +18,8 @@
   "TRANSFER": "تم تحويل الرحلة",
   "assign_driver_successfully":"تم اضافة السائق بنجاح",
   "status_changed_successfully": "تم تغيير الحالة بنجاح",
-  "dead_line" : "الوقت المتبقي للرحلة القادمة"
-
-
-
-
-
-
-
+  "dead_line" : "الوقت المتبقي للرحلة القادمة",
+  "all_driver_change_trip" : " طلبات السائق لتغيير الرحلات",
+  "accept" : "موافقة",
+  "Are_you_sure_to_active_driver_request" : "هل انت موافق على طلب السائق"
 }

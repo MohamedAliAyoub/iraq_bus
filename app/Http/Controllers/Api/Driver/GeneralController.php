@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Driver;
 
+use App\Models\Schedule;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
@@ -23,9 +25,9 @@ class GeneralController extends Controller
     /**
      *
      * All Countries
-     * @return void
+     * @return JsonResponse
      */
-    public function countries( )
+    public function countries( ): JsonResponse
     {
       $countries = json_decode(file_get_contents(resource_path('views/partials/country.json')));
       return response()->json(['status' => 'success','data'=> $countries ,'message'=>trans('messages.data_found')])->setStatusCode(200);
@@ -35,9 +37,9 @@ class GeneralController extends Controller
      /**
      *
      * All Banners
-     * @return void
+     * @return JsonResponse
      */
-    public function banners( )
+    public function banners( ): JsonResponse
     {
       $banners = Banner::orderby('id','desc')->paginate(getPaginate());
       return response()->json(['status' => 'success','data'=> BannerResource::collection($banners)->response()->getData() ,'message'=>''])->setStatusCode(200);
@@ -47,9 +49,9 @@ class GeneralController extends Controller
     /**
      *
      * All fleet Types
-     * @return void
+     * @return JsonResponse
      */
-    public function fleetTypes()
+    public function fleetTypes(): JsonResponse
     {
       $fleetType =FleetType::active()->select(['id','name'])->get();
       return response()->json(['status' => 'success','data'=> $fleetType ,'message'=>''])->setStatusCode(200);
@@ -58,13 +60,24 @@ class GeneralController extends Controller
       /**
      *
      * All routes
-     * @return void
+     * @return JsonResponse
      */
-    public function routes()
+    public function routes(): JsonResponse
     {
       $routes = VehicleRoute::active()->select(['id','name'])->get();
       return response()->json(['status' => 'success','data'=> $routes ,'message'=>''])->setStatusCode(200);
-    } 
+    }
+
+    /**
+     *
+     * All routes
+     * @return JsonResponse
+     */
+    public function schedules(): JsonResponse
+    {
+        $schedules = Schedule::active()->select(['id','name'])->get();
+        return response()->json(['status' => 'success','data'=> $schedules ,'message'=>''])->setStatusCode(200);
+    }
 
 }
 

@@ -194,6 +194,9 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
 
             //trip
             Route::get('trip', 'ManageTripController@trips')->name('list');
+            Route::get('driver-change-trips-request', 'ManageTripController@getDriverChangeTripsRequest')->name('getDriverChangeTripsRequest');
+            Route::get('reject-driver-request/{id}', 'ManageTripController@rejectDriverRequest')->name('rejectDriverRequest');
+            Route::post('accept-driver-request', 'ManageTripController@acceptDriverRequest')->name('acceptDriverRequest');
             Route::get('driver-trip', 'ManageTripController@driverTrips')->name('driver.list');
             Route::post('assign_driver/{id}', 'ManageTripController@assignDriver')->name('driver.assign');
 
