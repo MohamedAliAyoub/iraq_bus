@@ -121,6 +121,12 @@
                                     <span class="menu-title">@lang('all_trips_monthly')</span>
                                 </a>
                             </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.trips.getDriverChangeTripsRequest' )}} ">
+                                <a href="{{route('admin.trip.getDriverChangeTripsRequest')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('all_driver_change_trip')</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
 

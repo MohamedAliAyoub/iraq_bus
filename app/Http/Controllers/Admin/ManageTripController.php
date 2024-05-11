@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AssignedVehicle;
 use App\Models\DriverTrips;
+use App\Models\EditTripHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\VehicleRoute;
@@ -239,6 +240,30 @@ class ManageTripController extends Controller
         $trips = Trip::with(['fleetType', 'route', 'schedule'])->orderBy('id', 'desc')->paginate(getPaginate());
 
         return view('admin.trip.trip', compact('pageTitle', 'emptyMessage', 'trips', 'fleetTypes', 'routes', 'schedules', 'stoppages'));
+    }
+
+    public function getDriverChangeTripsRequest()
+    {
+        $pageTitle = "Get Driver Change Trips Request";
+        $emptyMessage = "No Driver Change Trips Request found";
+
+
+        $trips = EditTripHistory::with(['driver', 'route', 'schedule'])
+            ->where('status' , 0)
+            ->orderBy('id', 'desc')
+            ->paginate(getPaginate());
+
+        return view('admin.trip.driver_change_trip_request', compact('pageTitle', 'emptyMessage', 'trips'));
+    }
+
+    public function rejectDriverRequest($id)
+    {
+        dd($id);
+    }
+
+    public function acceptDriverRequest(Request $request)
+    {
+        dd($request->all());
     }
 
     public function driverTrips()
