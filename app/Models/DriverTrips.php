@@ -31,6 +31,11 @@ class DriverTrips extends Model
         return $this->belongsTo(User::class, 'driver_id');
     }
 
+    public function seat(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Seat::class, 'seat_id');
+    }
+
     public function getTotalSeatsAttribute()
     {
         return $this->trip->fleetType->total_seats;

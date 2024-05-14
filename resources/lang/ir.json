@@ -7,6 +7,7 @@
   "Ticket_Does_Not_Exist": "لا توجد تزكرة محجوزة",
   "you_dont_have_enough_money" : "عفوا . ليس لديك مال كافي",
   "car_completed": "لقد اكتملت السيارة لا يمكنك الحجز فيها ",
+  "seat_booked": "المقعد محجوز",
   "manage_drivers" : "ادارة السائقين",
   "trips" : "الرحلات",
   "all_trips_monthly": "كل الرحلات الشهر",

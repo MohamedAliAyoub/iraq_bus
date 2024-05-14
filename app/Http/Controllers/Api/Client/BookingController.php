@@ -149,6 +149,7 @@ class BookingController extends Controller
      */
     public function bookDirectBooking(BookDirectBookingRequest $request)
     {
+
         $trip = Trip::findOrFail($request->trip_id);
         $dayGoDate = Carbon::parse($request->go_date)->format('w');
         $dayBackDate = $request->back_date ? Carbon::parse($request->back_date)->format('w') : '';
@@ -176,48 +177,13 @@ class BookingController extends Controller
             'date' => Carbon::parse($request->go_date)->format('Y-m-d'),
         ])->first();
 
-       if ($driver_trips != null)
-        if ($driver_trips->booked_count + count( $request->seats ) > $driver_trips->total_seats  )
-            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('car_completed')])->setStatusCode(400);
+        if ($driver_trips != null)
+            if ($driver_trips->booked_count + count($request->seats) > $driver_trips->total_seats)
+                return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('car_completed')])->setStatusCode(400);
 
-
-        $driver_trips = DriverTrips::query()->updateOrCreate(
-            [
-                'trip_id' => $trip->id,
-                'date' => Carbon::parse($request->go_date)->format('Y-m-d'),
-            ],
-            [
-                'booked_count' => DB::raw('booked_count + ' . sizeof($request->seats)), // Increment booked_count
-                'trip_id' => $trip->id,
-                'date' => Carbon::parse($request->go_date)->format('Y-m-d'),
-            ]
-        );
-
-
-
-//        dd($trip->start_from , $trip->end_to);
-//
-//        if ( is_null($booked_ticket)) {
-//            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Why you are choosing those seats which are already booked?')])->setStatusCode(400);
-//        }
-
-        $startPoint = array_search($trip->start_from, array_values($trip->route->stoppages));
-        $endPoint = array_search($trip->end_to, array_values($trip->route->stoppages));
-        $reverse = ($startPoint < $endPoint) ? false : true;
-
-        if (!$reverse) {
-            $can_go = ($source_pos < $destination_pos) ? true : false;
-        } else {
-            $can_go = ($source_pos > $destination_pos) ? true : false;
-        }
-
-        if (!$can_go) {
-            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Select Pickup Point & Dropping Point Properly')])->setStatusCode(400);
-        }
 
         $route = $trip->route;
         $ticketPrice = TicketPrice::where('fleet_type_id', $trip->fleetType->id)->where('vehicle_route_id', $route->id)->first();
-
 
         // calculate sub_total
         $subTotal = 0;
@@ -237,6 +203,48 @@ class BookingController extends Controller
                 'data' => null,
                 'message' => trans('you_dont_have_enough_money')])
                 ->setStatusCode(400);
+        }
+
+        $driver_trips = DriverTrips::query()->updateOrCreate(
+            [
+                'trip_id' => $trip->id,
+                'date' => Carbon::parse($request->go_date)->format('Y-m-d'),
+            ],
+            [
+                'trip_id' => $trip->id,
+                'date' => Carbon::parse($request->go_date)->format('Y-m-d'),
+            ]
+        );
+        // Get the seat IDs from $request->seats
+        $requestSeatIds = array_map(function ($seat) {
+            return $seat['id'];
+        }, $request->seats) ?? [];
+        $commonValues = array_intersect(json_decode($driver_trips->seats_id) ?? [], $requestSeatIds);
+
+        if (!empty($commonValues)) {
+            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('seat_booked')])->setStatusCode(400);
+
+        } else {
+            $existingSeatIds = json_decode($driver_trips->seats_id, true) ?? [];
+            $mergedSeatIds = array_merge($existingSeatIds, $requestSeatIds);
+
+            $driver_trips->update(['seats_id' => json_encode($mergedSeatIds)]);
+            $driver_trips->increment('booked_count', sizeof($request->seats));
+        }
+
+
+        $startPoint = array_search($trip->start_from, array_values($trip->route->stoppages));
+        $endPoint = array_search($trip->end_to, array_values($trip->route->stoppages));
+        $reverse = ($startPoint < $endPoint) ? false : true;
+
+        if (!$reverse) {
+            $can_go = ($source_pos < $destination_pos) ? true : false;
+        } else {
+            $can_go = ($source_pos > $destination_pos) ? true : false;
+        }
+
+        if (!$can_go) {
+            return response()->json(['status' => 'fail', 'data' => null, 'message' => trans('messages.Select Pickup Point & Dropping Point Properly')])->setStatusCode(400);
         }
 
 

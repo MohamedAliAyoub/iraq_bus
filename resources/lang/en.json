@@ -812,6 +812,8 @@
   "you_dont_have_enough_money": "you dont have enough money",
   "Ticket_Does_Not_Exist": "Ticket does not exist",
   "car_completed": "car completed",
+  "seat_booked": "seat booked",
+
   "manage_drivers": "manage drivers",
   "trips": "trips",
   "all_trips_monthly": "all trips monthly",
