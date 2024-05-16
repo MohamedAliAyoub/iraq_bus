@@ -96,8 +96,8 @@ class AgentDepositController extends Controller
         if($end){
             $deposits = AgentDeposit::where('status','!=',0)->whereDate('created_at','>=',Carbon::parse($start))->whereDate('created_at','<=',Carbon::parse($end));
         }
-        if ($request->method) {
-            $method = Gateway::where('alias',$request->method)->firstOrFail();
+        if ($request->input("method")) {
+            $method = Gateway::where('alias',$request->input("method"))->firstOrFail();
             $deposits = $deposits->where('method_code',$method->code);
         }
         if ($scope == 'pending') {

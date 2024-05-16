@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\AdminNotification;
 use App\Models\AgentDeposit;
+use App\Models\DriverDeposit;
 use App\Models\Frontend;
 use App\Models\GeneralSetting;
 use App\Models\Language;
@@ -54,7 +55,8 @@ class AppServiceProvider extends ServiceProvider
                 'pending_ticket_count'         => SupportTicket::whereIN('status', [0,2])->count(),
                 'pending_vehicle_ticket'       => BookedTicket::where('status',  2)->count(),
                 'pending_payment_count'       => Deposit::where('status', 2)->count(),
-                'agent_pending_payment_count'       => AgentDeposit::where('status', 2)->count()
+                'agent_pending_payment_count'       => AgentDeposit::where('status', 2)->count(),
+                'driver_pending_payment_count'       => DriverDeposit::where('status', 2)->count()
             ]);
         });
 

@@ -4,9 +4,9 @@
     <div class="sidebar__inner">
         <div class="sidebar__logo">
             <a href="{{route('admin.dashboard')}}" class="sidebar__main-logo"><img
-                    src="{{getImage(imagePath()['logoIcon']['path'] .'/logo_2.png')}}" alt="@lang('image')"></a>
+                        src="{{getImage(imagePath()['logoIcon']['path'] .'/logo_2.png')}}" alt="@lang('image')"></a>
             <a href="{{route('admin.dashboard')}}" class="sidebar__logo-shape"><img
-                    src="{{getImage(imagePath()['logoIcon']['path'] .'/favicon.png')}}" alt="@lang('image')"></a>
+                        src="{{getImage(imagePath()['logoIcon']['path'] .'/favicon.png')}}" alt="@lang('image')"></a>
             <button type="button" class="navbar__expand"></button>
         </div>
 
@@ -74,7 +74,7 @@
 
                                     @if($email_unverified_users_count)
                                         <span
-                                            class="menu-badge pill bg--primary ml-auto">{{$email_unverified_users_count}}</span>
+                                                class="menu-badge pill bg--primary ml-auto">{{$email_unverified_users_count}}</span>
                                     @endif
                                 </a>
                             </li>
@@ -85,7 +85,7 @@
                                     <span class="menu-title">@lang('SMS Unverified')</span>
                                     @if($sms_unverified_users_count)
                                         <span
-                                            class="menu-badge pill bg--primary ml-auto">{{$sms_unverified_users_count}}</span>
+                                                class="menu-badge pill bg--primary ml-auto">{{$sms_unverified_users_count}}</span>
                                     @endif
                                 </a>
                             </li>
@@ -218,6 +218,48 @@
                     </div>
                 </li>
 
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)" class="{{menuActive('admin.driver*',3)}}">
+                        <i class="menu-icon las la-credit-card"></i>
+                        <span class="menu-title">@lang('Driver_Payment_History')</span>
+                        @if($driver_pending_payment_count>0)
+                            <span class="menu-badge pill bg--primary ml-auto">
+                                <i class="fa fa-exclamation"></i>
+                            </span>
+                        @endif
+                    </a>
+                    <div class="sidebar-submenu {{menuActive('admin.driver_deposit*',2)}} ">
+                        <ul>
+                            <li class="sidebar-menu-item {{menuActive('admin.driver_deposit.pending')}} ">
+                                <a href="{{ route('admin.driver_deposit.pending') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Pending Payment')</span>
+                                    @if($driver_pending_payment_count)
+                                        <span class="menu-badge pill bg--primary ml-auto">{{$driver_pending_payment_count}}</span>
+                                    @endif
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.driver_deposit.successful')}} ">
+                                <a href="{{ route('admin.driver_deposit.successful') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Successful Payment')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.driver_deposit.rejected')}} ">
+                                <a href="{{ route('admin.driver_deposit.rejected') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Rejected Payment')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.driver_deposit.all')}} ">
+                                <a href="{{ route('admin.driver_deposit.all') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('All Payment')</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
 
                 <li class="sidebar-menu-item sidebar-dropdown">
@@ -315,7 +357,7 @@
                                     <span class="menu-title">@lang('Pending Ticket')</span>
                                     @if($pending_ticket_count)
                                         <span
-                                            class="menu-badge pill bg--primary ml-auto">{{$pending_ticket_count}}</span>
+                                                class="menu-badge pill bg--primary ml-auto">{{$pending_ticket_count}}</span>
                                     @endif
                                 </a>
                             </li>
@@ -577,7 +619,7 @@
                     <div class="sidebar-submenu {{menuActive('admin.frontend.sections*',2)}} ">
                         <ul>
                             @php
-                               $lastSegment = collect(request()->segments())->last();
+                                $lastSegment = collect(request()->segments())->last();
                             @endphp
                             @foreach(getPageSections(true) as $k => $secs)
                                 @if($secs['builder'])

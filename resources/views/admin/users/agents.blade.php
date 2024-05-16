@@ -17,37 +17,38 @@
                             </thead>
                             <tbody>
                             @forelse($users as $user)
-                            <tr>
-                                <td data-label="@lang('User')">
-                                    <span class="font-weight-bold">{{$user->fullname}}</span>
-                                    <br>
-                                    <span class="small">
+                                <tr>
+                                    <td data-label="@lang('User')">
+                                        <span class="font-weight-bold">{{$user->fullname}}</span>
+                                        <br>
+                                        <span class="small">
                                     <a href="{{ route('admin.users.detail', $user->id) }}"><span>@</span>{{ $user->username }}</a>
                                     </span>
-                                </td>
+                                    </td>
 
 
-                                <td data-label="@lang('Email-Phone')">
-                                    {{ $user->email }}<br>{{ $user->mobile }}
-                                </td>
-                                <td data-label="@lang('Country')">
-                                    <span class="font-weight-bold" data-toggle="tooltip" data-original-title="{{ @$user->address->country }}">{{ $user->country_code }}</span>
-                                </td>
+                                    <td data-label="@lang('Email-Phone')">
+                                        {{ $user->email }}<br>{{ $user->mobile }}
+                                    </td>
+                                    <td data-label="@lang('Country')">
+                                        <span class="font-weight-bold" data-toggle="tooltip"
+                                              data-original-title="{{ @$user->address->country }}">{{ $user->country_code }}</span>
+                                    </td>
 
 
+                                    <td data-label="@lang('Joined At')">
+                                        {{ showDateTime($user->created_at) }}
+                                        <br> {{ diffForHumans($user->created_at) }}
+                                    </td>
 
-                                <td data-label="@lang('Joined At')">
-                                    {{ showDateTime($user->created_at) }} <br> {{ diffForHumans($user->created_at) }}
-                                </td>
 
-
-
-                                <td data-label="@lang('Action')">
-                                    <a href="{{ route('admin.users.detail', $user->id) }}" class="icon-btn" data-toggle="tooltip" title="" data-original-title="@lang('Details')">
-                                        <i class="las la-desktop text--shadow"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                                    <td data-label="@lang('Action')">
+                                        <a href="{{ route('admin.users.detail', $user->id) }}" class="icon-btn"
+                                           data-toggle="tooltip" title="" data-original-title="@lang('Details')">
+                                            <i class="las la-desktop text--shadow"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             @empty
                                 <tr>
                                     <td class="text-muted text-center" colspan="100%">{{ __($emptyMessage) }}</td>
@@ -71,15 +72,18 @@
 
 
 @push('breadcrumb-plugins')
-    <form action="{{ route('admin.users.search', $scope ?? str_replace('admin.users.', '', request()->route()->getName())) }}" method="GET" class="form-inline float-sm-right bg--white">
+    <form action="{{ route('admin.users.search', $scope ?? str_replace('admin.users.', '', request()->route()->getName())) }}"
+          method="GET" class="form-inline float-sm-right bg--white">
         <div class="input-group has_append">
-            <input type="text" name="search" class="form-control" placeholder="@lang('Username or email')" value="{{ $search ?? '' }}">
+            <input type="text" name="search" class="form-control" placeholder="@lang('Username or email')"
+                   value="{{ $search ?? '' }}">
             <div class="input-group-append">
                 <button class="btn btn--primary" type="submit"><i class="fa fa-search"></i></button>
             </div>
         </div>
     </form>
     <div class="d-inline-block ml-2">
-        <a href="{{ route('admin.users.create') }}" class="btn btn--success"><i class="fa fa-plus"></i> @lang('Add User')</a>
+        <a href="{{ route('admin.users.create') }}" class="btn btn--success"><i
+                    class="fa fa-plus"></i> @lang('Add User')</a>
     </div>
 @endpush

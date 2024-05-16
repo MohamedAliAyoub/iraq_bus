@@ -244,6 +244,22 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
 
         });
 
+        // DEPOSIT AGENT SYSTEM
+        Route::name('driver_deposit.')->prefix('driver_payment')->group(function(){
+            Route::get('create', 'DriverDepositController@create')->name('create');
+            Route::post('store', 'DriverDepositController@store')->name('store');
+            Route::get('pending', 'DriverDepositController@pending')->name('pending');
+            Route::get('successful', 'DriverDepositController@successful')->name('successful');
+            Route::get('rejected', 'DriverDepositController@rejected')->name('rejected');
+            Route::get('all', 'DriverDepositController@all')->name('all');
+            Route::get('details/{id}', 'DriverDepositController@details')->name('details');
+
+            Route::get('via/{method}/{type?}', 'DriverDepositController@depositViaMethod')->name('method');
+            Route::get('/{scope}/search', 'DriverDepositController@search')->name('search');
+            Route::get('date-search/{scope}', 'DriverDepositController@dateSearch')->name('dateSearch');
+
+        });
+
 
 
 
