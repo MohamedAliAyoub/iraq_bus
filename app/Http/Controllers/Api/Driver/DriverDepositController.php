@@ -17,6 +17,13 @@ use Carbon\Carbon;
 class DriverDepositController extends Controller
 {
     protected $depoRelations = ['user', 'gateway' , 'driver'];
+
+    public function getAmount()
+    {
+        $geteways = Gateway::where('status', 1)->whereNotNull('input_form')->get(['id','name','image']);
+        return response()->json(['status' => 'success', 'data' => $geteways, 'message' => null])->setStatusCode(200);
+
+    }
     public function index()
     {
         $deposits = DriverDeposit::where('driver_id', auth()->id())->with($this->depoRelations)->latest()->paginate(15);
