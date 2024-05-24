@@ -32,6 +32,7 @@ class DriverDepositController extends Controller
     // add favorite driver amount in driver_details
     public function addFavoriteDriverAmount(Request $request)
     {
+        dd(auth()->id());
         $request->validate([
             'mobile' => 'required|numeric',
             'gateway' => 'required|numeric|exists:gateways,id',
