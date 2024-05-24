@@ -153,6 +153,10 @@ Route::namespace('Api\Driver')->name('driver.')->prefix('v1/driver')->group(func
             Route::post('reject', 'DriverDepositController@reject');
             Route::post('approve', 'DriverDepositController@approve');
             Route::get('amount', 'DriverDepositController@getAmount');
+            Route::post('addFavoriteDriverAmount', 'DriverDepositController@addFavoriteDriverAmount');
+            Route::get('getFavoriteDriverAmount', 'DriverDepositController@getFavoriteDriverAmount');
+
+
         });
         Route::get('history', 'HistoryController@getHistory');
     });
