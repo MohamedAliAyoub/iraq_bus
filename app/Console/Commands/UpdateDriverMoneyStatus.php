@@ -6,6 +6,7 @@ use App\Models\DriverFinancial;
 use App\Models\DriverMoney;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class UpdateDriverMoneyStatus extends Command
 {
@@ -41,15 +42,18 @@ class UpdateDriverMoneyStatus extends Command
     public function handle()
     {
         // Get records created more than 48 hours ago
-        $records = DriverMoney::where([['created_at', '<=', Carbon::now()->subHours(48)] , 'status' , 0])->get();
+        $records = DriverMoney::where('created_at', '<=', Carbon::now()->subHours(48))
+            ->where('status', 0)
+            ->get();
 
-        // Update status to 1 for each record
         foreach ($records as $record) {
+
+            DriverFinancial::where('driver_id', $record->driver_id)
+                ->update([
+                    'current_balance' => DB::raw('current_balance + ' . $record->price),
+                    'suspended_balance' => DB::raw('suspended_balance - ' . $record->price)
+                ]);
             $record->update(['status' => 1]);
-            DriverFinancial::query()
-                ->where('driver_id' , $record->driver_id)
-                ->increment('current_balance' , $record->price)
-                ->decrement('suspended_balance' , $record->price);
         }
 
         $this->info('Driver money records updated from  suspended_balance to  current_balance successfully.');
