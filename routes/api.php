@@ -160,4 +160,8 @@ Route::namespace('Api\Driver')->name('driver.')->prefix('v1/driver')->group(func
         });
         Route::get('history', 'HistoryController@getHistory');
     });
+    Route::get('optimize' , function(){
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        return 'Optimized clear successfully';
+    });
 });
