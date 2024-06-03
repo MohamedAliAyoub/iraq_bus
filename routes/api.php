@@ -166,11 +166,7 @@ Route::namespace('Api\Driver')->name('driver.')->prefix('v1/driver')->group(func
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');
         return 'Optimized clear successfully';
     });
-    Route::group(['prefix' => 'zaincash'], function () {
-        Route::post('init', 'ZianCashController@initTransaction');
-        Route::get('callback', 'ZianCashController@handleRedirect');
-        Route::post('status', 'ZianCashController@checkStatus');
-    });
+
 
     Route::group(['prefix' => 'zain'], function () {
         Route::post('init', 'ZainController@createTransaction');
