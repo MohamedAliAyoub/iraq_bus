@@ -29,6 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('driver_money:update')->everyMinute();
     }
 
+
     /**
      * Register the commands for the application.
      *

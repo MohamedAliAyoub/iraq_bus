@@ -12,6 +12,7 @@
         "coingate/coingate-php": "^3.0",
         "ezyang/htmlpurifier": "^4.13",
         "fideloper/proxy": "^4.4",
+        "firebase/php-jwt": "^6.10",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.5",

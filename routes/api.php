@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Driver\ZianCashController;
+use App\Http\Controllers\Api\Driver\ZianController;
+
 
 
 Route::namespace('Api')->name('api.')->group(function () {
@@ -100,7 +103,6 @@ Route::namespace('Api\Client')->name('client.')->prefix('v1/client')->group(func
         Route::get('history', 'HistoryController@getHistory');
 
 
-
     });
 });
 //-------------------Driver Application-----------------------//
@@ -160,8 +162,19 @@ Route::namespace('Api\Driver')->name('driver.')->prefix('v1/driver')->group(func
         });
         Route::get('history', 'HistoryController@getHistory');
     });
-    Route::get('optimize' , function(){
+    Route::get('optimize', function () {
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');
         return 'Optimized clear successfully';
+    });
+    Route::group(['prefix' => 'zaincash'], function () {
+        Route::post('init', 'ZianCashController@initTransaction');
+        Route::get('callback', 'ZianCashController@handleRedirect');
+        Route::post('status', 'ZianCashController@checkStatus');
+    });
+
+    Route::group(['prefix' => 'zain'], function () {
+        Route::post('init', 'ZainController@createTransaction');
+        Route::get('callback', 'ZainController@handleRedirect');
+        Route::post('status', 'ZainController@checkTransactionStatus');
     });
 });

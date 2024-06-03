@@ -73,6 +73,7 @@ class Kernel extends HttpKernel
         'checkStatus' => \App\Http\Middleware\CheckStatus::class,
         'checkStatusApi' => \App\Http\Middleware\CheckStatusApi::class,
         'check.user' => \App\Http\Middleware\CheckUserType::class,
+        'validate.zaincash' => \App\Http\Middleware\ValidateZainCashRequest::class
 
     ];
 }
