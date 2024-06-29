@@ -249,7 +249,7 @@ class ManageTripController extends Controller
 
 
         $trips = EditTripHistory::with(['driver', 'route', 'schedule'])
-            ->where('status' , 0)
+            ->where('status', 0)
             ->orderBy('id', 'desc')
             ->paginate(getPaginate());
 
@@ -276,10 +276,9 @@ class ManageTripController extends Controller
         $schedules = Schedule::where('status', 1)->get();
         $stoppages = Counter::where('status', 1)->get();
         $drivers = User::query()->where('type', User::DRIVER)->get();
-        $trips = DriverTrips::with(['driver','trip' => function ($q) {
+        $trips = DriverTrips::with(['driver', 'trip' => function ($q) {
             $q->with(['fleetType', 'route', 'schedule']);
         }])->orderBy('id', 'desc')->paginate(getPaginate());
-
 
 
         return view('admin.trip.driver_trip', compact('pageTitle', 'drivers', 'emptyMessage', 'trips', 'fleetTypes', 'routes', 'schedules', 'stoppages'));
@@ -300,6 +299,17 @@ class ManageTripController extends Controller
         $trip = DriverTrips::find($id);
         $trip->driver_id = $request->driver_id;
         $trip->save();
+
+        $driver = User::find($request->driver_id);
+        notify(
+            $driver, 'ASSIGN_DRIVER',
+            [
+                'driver' => $driver,
+                'trip' => $trip,
+                'message' => 'لديك رحلة جديدة من فضلك قم بالتاكيد عليها.'  //optional
+            ]
+        );
+
 
         $notify[] = ['success', 'assign driver successfully'];
         return back()->withNotify($notify);

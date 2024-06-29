@@ -197,11 +197,11 @@ class AgentDepositController extends Controller
 //            'currency' => $general->cur_text,
 //            'rate' => showAmount($deposit->rate),
 //            'trx' => $deposit->trx,
-////            'journey_date' => showDateTime($bookedTicket->date_of_journey , 'd m, Y'),
-////            'seats' => implode(',',$bookedTicket->seats),
-////            'total_seats' => sizeof($bookedTicket->seats),
-////            'source' => $bookedTicket->pickup->name,
-////            'destination' => $bookedTicket->drop->name
+//            'journey_date' => showDateTime($bookedTicket->date_of_journey , 'd m, Y'),
+//            'seats' => implode(',',$bookedTicket->seats),
+//            'total_seats' => sizeof($bookedTicket->seats),
+//            'source' => $bookedTicket->pickup->name,
+//            'destination' => $bookedTicket->drop->name
 //        ]);
         $notify[] = ['success', __('Payment_Request_Has_Been_Approved')];
 
