@@ -185,17 +185,17 @@ class BookingController extends Controller
         $route = $trip->route;
         $ticketPrice = TicketPrice::where('fleet_type_id', $trip->fleetType->id)->where('vehicle_route_id', $route->id)->first();
 
+
         // calculate sub_total
         $subTotal = 0;
         $seatName = [];
 
         foreach ($request->seats as $key => $seat) {
             $seatPrice = Seat::where(['ticket_price_id' => $ticketPrice->id,
-                'id' => $seat['id']])->pluck('price')->first();
+                'name' => $seat['name']  ]  )->pluck('price')->first();
             $subTotal += $seatPrice;
             $seatNames[] = $seat['name'];
         }
-
 
         if (auth()->user()->pocket->amount + auth()->user()->pocket->credit_limit < $subTotal) {
             return response()->json([

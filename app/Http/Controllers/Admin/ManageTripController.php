@@ -281,6 +281,7 @@ class ManageTripController extends Controller
         }])->orderBy('id', 'desc')->paginate(getPaginate());
 
 
+
         return view('admin.trip.driver_trip', compact('pageTitle', 'drivers', 'emptyMessage', 'trips', 'fleetTypes', 'routes', 'schedules', 'stoppages'));
     }
 

@@ -120,6 +120,7 @@ class TripController extends Controller
             })
             ->sum('sub_total');
         // Calculate 90% of the total price
+
         $driverPrice = $totalPrice * 0.9;
 
         return $driverPrice;
@@ -152,7 +153,7 @@ class TripController extends Controller
             $trip->update(['price' => $this->getDriverPrice($trip)]);
             DriverFinancial::query()->updateOrCreate([
                 'driver_id' => auth()->id(),
-            ], ['suspended_balance' => DB::raw('suspended_balance + ' . $trip->price)]);
+            ], ['current_balance' => DB::raw('current_balance + ' . $trip->price)]);
             DriverMoney::query()->create([
                 'driver_id' => auth()->id(),
                 'driver_trip_id' => $trip->id,
