@@ -287,6 +287,7 @@ class ManageTripController extends Controller
     public function assignDriver(Request $request, $id)
     {
 
+        dd("test");
         $request->validate([
             'driver_id' => [
                 'required',
@@ -301,12 +302,13 @@ class ManageTripController extends Controller
         $trip->save();
 
         $driver = User::find($request->driver_id);
+
         notify(
             $driver, 'ASSIGN_DRIVER',
             [
                 'driver' => $driver,
                 'trip' => $trip,
-                'message' => 'لديك رحلة جديدة من فضلك قم بالتاكيد عليها.'  //optional
+                'message' => 'لديك رحلة جديدة من فضلك قم بالتاكيد عليها.'
             ]
         );
 

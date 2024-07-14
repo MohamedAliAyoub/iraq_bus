@@ -176,7 +176,8 @@ class TripController extends Controller
     public function startTrip(Request $request)
     {
         DriverTrips::query()->findOrFail($request->id)->update(['status' => 4]);
-        TODO: //change the status of trip then send notifacations , sms , whatsapp to users
+        //TODO: change the status of trip then send notifacations , sms , whatsapp to users
+
         return response()->json(['status' => 'success', 'data' => [], 'message' => __('status_changed_successfully')])->setStatusCode(200);
 
     }
@@ -208,7 +209,7 @@ class TripController extends Controller
         if ($hoursDifference < 12) {
             return response()->json(['status' => 'fail', 'data' => null, 'message' => 'Cannot transfer trip as less than 12 hours remaining'])->setStatusCode(400);
         }
-        TODO: //send notifiaction to dashboard
+        //TODO: send notifiaction to dashboard
         $trip->update(['status' => 5, 'driver_id' => null]);
         return response()->json(['status' => 'success', 'data' => [], 'message' => __('status_changed_successfully')])->setStatusCode(200);
     }
