@@ -287,7 +287,6 @@ class ManageTripController extends Controller
     public function assignDriver(Request $request, $id)
     {
 
-        dd("test");
         $request->validate([
             'driver_id' => [
                 'required',
